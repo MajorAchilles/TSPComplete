@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace TSPTest
 {
     public class TSPGenerator
     {
-        List<CityNode> cities { get; set; }
+        List<Point> cities { get; set; }
         public int LandHorizontal { get; set; }
         public int LandVertical { get; set; }
         public int BorderSize { get; set; }
@@ -23,17 +21,15 @@ namespace TSPTest
             this.BorderSize = borderSize;
         }
 
-        public List<CityNode> GenerateCities()
+        public List<Point> GenerateCities()
         {
-            cities = new List<CityNode>(MaxCities);
-            Random random = new Random();
-
+            cities = new List<Point>(MaxCities);
             for (int i = 0; i < MaxCities; i++)
             {
-                CityNode city = new CityNode();
-                int x = random.Next(0+BorderSize, LandHorizontal-BorderSize-BorderSize);
-                int y = random.Next(0+BorderSize, LandVertical-BorderSize-BorderSize);
-                city.Coordinates = new Point(x, y);
+
+                int x = Utils.random.Next(0+BorderSize, LandHorizontal-BorderSize-BorderSize);
+                int y = Utils.random.Next(0+BorderSize, LandVertical-BorderSize-BorderSize);
+                Point city = new Point(x, y);
                 cities.Add(city);
             }
             return cities;
