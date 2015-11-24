@@ -16,7 +16,8 @@ namespace TSPTest
         double bestDistance = 99999;
         double worstDistance = -100;
         TSPGeneticAlgorithm ga;
-        BackgroundWorker bw;
+        BackgroundWorker bwAlgorithm;
+        //Thread drawingThread;
         bool doneDraw = false;
         int eliteCount;
         int mutationChance;
@@ -32,29 +33,35 @@ namespace TSPTest
             InitializeComponent();
             this.DoubleBuffered = true;
             this.population = population;
-            bw = new BackgroundWorker();
-            bw.WorkerReportsProgress = true;
-            bw.DoWork += Bw_DoWork;
-            bw.ProgressChanged += Bw_ProgressChanged;
-            bw.WorkerSupportsCancellation = true;
+            bwAlgorithm = new BackgroundWorker();
+            bwAlgorithm.WorkerReportsProgress = true;
+            bwAlgorithm.WorkerSupportsCancellation = true;
+            bwAlgorithm.DoWork += BwAlgorithm_DoWork;
+            bwAlgorithm.ProgressChanged += BwAlgorithm_ProgressChanged;
 
             ga = new TSPGeneticAlgorithm(population, population.Count(), mutationChance, eliteCount);
         }
 
-
-
         private void DrawPopulation()
         {
             doneDraw = false;
-
+            this.SuspendLayout();
             for (int i = 0; i < tableLayoutPanel1.Controls.Count; i++)
             {
                 PictureBox pB = (PictureBox)tableLayoutPanel1.Controls[i];
                 pB.BackColor = SystemColors.Control;
-                double distance = population[i].Fitness;
-                pB.Image = population[i].Tour.DrawTour();
+                //drawingThread = new Thread(null);
+                //drawingThread = new Thread(()=> pB.Image = population[i].Tour.DrawTour());
+                //drawingThread.Start();
+                //drawingThread.Join();
+
+                
+                pB.Image = population[i].Tour.DrawTour(); //Another thread?
+                //pB.Image = await DrawImage(population[i].Tour);
                 pB.Tag = i;
             }
+            //if (ga.GenerationNo % 10 == 0)
+            this.ResumeLayout();
 
             bestDistance = population[0].Fitness;
             worstDistance = population[population.Count() - 1].Fitness;
@@ -75,10 +82,10 @@ namespace TSPTest
 
         private void ProgressViewer_Load(object sender, EventArgs e)
         {
-            bw.RunWorkerAsync();
+            bwAlgorithm.RunWorkerAsync();
         }
 
-        private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BwAlgorithm_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             DrawPopulation();
             textBox1.Text += "Generation " + e.ProgressPercentage + Environment.NewLine;
@@ -88,7 +95,7 @@ namespace TSPTest
             textBox1.ScrollTextBoxToBottom();
         }
 
-        private void Bw_DoWork(object sender, DoWorkEventArgs e)
+        private void BwAlgorithm_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
 
@@ -103,7 +110,6 @@ namespace TSPTest
                 if (worker.CancellationPending)
                     break;
             }
-
         }
 
         private void ProgressViewer_FormClosing(object sender, FormClosingEventArgs e)

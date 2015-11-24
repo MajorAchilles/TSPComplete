@@ -94,7 +94,7 @@ namespace TSPTest
                 population[i] = solution;
             }
 
-            new ProgressViewer(population, (int) numericUpDownMaxGenerations.Value, (int) numericUpDownMutationChance.Value, (int) numericUpDownEliteCount.Value).ShowDialog();
+            new ProgressViewerDirectPaint(population, (int) numericUpDownMaxGenerations.Value, (int) numericUpDownMutationChance.Value, (int) numericUpDownEliteCount.Value).ShowDialog();
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)

@@ -16,7 +16,6 @@ namespace TSPTest
                 return null;
 
             Bitmap tspImage = new Bitmap(TSPViewer.HorizontalSize, TSPViewer.VerticalSize);
-
             Graphics g = Graphics.FromImage(tspImage);
             //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.Clear(Color.White);
@@ -34,6 +33,8 @@ namespace TSPTest
             Point last = tour[tour.Count - 1];
             g.FillEllipse(Brushes.Black, new Rectangle(last.X - 2, last.Y - 2, 5, 5));
             g.DrawEllipse(Pens.Black, new Rectangle(last.X - 4, last.Y - 4, 9, 9));
+            g.DrawLine(Pens.Red, last, tour[0]);
+
 
             return tspImage;
         }
@@ -69,6 +70,7 @@ namespace TSPTest
                     Point next = tour[i + 1];
                     tourDistance += GetDistance(city, next);
                 }
+                tourDistance += GetDistance(tour[tour.Count - 1], tour[0]);
             }
             return tourDistance;
         }

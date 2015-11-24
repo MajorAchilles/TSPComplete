@@ -169,10 +169,22 @@ namespace TSPTest
 
                 int index = random.Next(0, organism.Tour.Count);
                 int next;
-                if (index == 0)
-                    next = index + 1;
-                else
+                if (index == 0) //First
+                    if (random.Next(0, 2) == 0) //Next or last
+                        next = index + 1;
+                    else
+                        next = organism.Tour.Count - 1;
+                else if (index == organism.Tour.Count - 1) //last
+                    if (random.Next(0, 2) == 0) //Previous or first
+                        next = index - 1;
+                    else
+                        next = 0;
+                else //All in between
+                    if (random.Next(0, 2) == 0) //Previous or next
                     next = index - 1;
+                else
+                    next = index + 1;
+
                 organism.Tour.Swap(index, next);
                 organism.Fitness = organism.Tour.GetTourDistance();
 
