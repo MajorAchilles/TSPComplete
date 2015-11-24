@@ -30,6 +30,7 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBoxViewPort = new System.Windows.Forms.PictureBox();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -55,6 +56,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.buttonStart);
             this.splitContainer1.Panel2.Controls.Add(this.button2);
             this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Panel2.Controls.Add(this.button1);
@@ -72,6 +74,16 @@
             this.pictureBoxViewPort.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxViewPort.TabIndex = 0;
             this.pictureBoxViewPort.TabStop = false;
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(30, 166);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(149, 40);
+            this.buttonStart.TabIndex = 7;
+            this.buttonStart.Text = "Start";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // button2
             // 
@@ -114,7 +126,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(51, 20);
             this.numericUpDown1.TabIndex = 2;
             this.numericUpDown1.Value = new decimal(new int[] {
-            10,
+            100,
             0,
             0,
             0});
@@ -148,6 +160,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.PictureBox pictureBoxViewPort;
+        private System.Windows.Forms.Button buttonStart;
     }
 }
 

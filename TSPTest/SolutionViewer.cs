@@ -11,15 +11,12 @@ namespace TSPTest
 {
     public partial class SolutionViewer : Form
     {
-        public SolutionViewer(List<CityNode> cities)
+        public SolutionViewer(RandomSolution randomSolution)
         {
             InitializeComponent();
 
-            RandomSolution randomSolution = new RandomSolution(cities);
-            randomSolution.CreateRandomSolution();
-            double distance = 0D;
-            this.pictureBox1.Image = randomSolution.DrawSolution(ref distance);
-            this.Text = "Distance: " + distance;
+            this.pictureBox1.Image = randomSolution.DrawSolution();
+            this.Text = "Distance: " + randomSolution.TourDistance;
         }
     }
 }

@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Axiard.Utilities">
+      <HintPath>..\..\..\..\Crucible\BUILD\Release\Axiard.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +60,7 @@
     <Compile Include="SolutionViewer.designer.cs">
       <DependentUpon>SolutionViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="TSPGeneticAlgorithm.cs" />
     <Compile Include="TSPViewer.cs">
       <SubType>Form</SubType>
     </Compile>

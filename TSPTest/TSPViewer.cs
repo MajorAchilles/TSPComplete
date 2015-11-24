@@ -11,7 +11,7 @@ namespace TSPTest
 {
     public partial class TSPViewer : Form
     {
-        int cityCount = 3;
+        int cityCount = 100;
         List<CityNode> cities;
         TSPGenerator tspGenerator;
         Bitmap tspImage;
@@ -82,7 +82,22 @@ namespace TSPTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            new SolutionViewer(cities).Show();
+            RandomSolution randomSolution = new RandomSolution(cities);
+            randomSolution.CreateRandomSolution();
+            new SolutionViewer(randomSolution).Show();
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            RandomSolution[] randomSolutionArray = new RandomSolution[16];
+            for(int i = 0; i<randomSolutionArray.Count(); i++)
+            {
+                RandomSolution randomSolution = new RandomSolution(cities);
+                randomSolution.CreateRandomSolution();
+                randomSolutionArray[i] = randomSolution;
+            }
+
+            new ProgressViewer(randomSolutionArray).ShowDialog();
         }
     }
 }
