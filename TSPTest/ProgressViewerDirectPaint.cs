@@ -120,6 +120,8 @@ namespace TSPTest
                     size = regions[i].Width;
                 int x = regions[i].Left + ((regions[i].Width - size) / 2); //x y adjusted relative to each region
                 int y = regions[i].Top + ((regions[i].Height - size) / 2);
+                string distanceString = "Distance: " + Environment.NewLine + Math.Round(population[i].Fitness, 2);
+                g.DrawString(distanceString, this.Font, Brushes.Black, new Point(regions[i].X + 10, regions[i].Y + 10));
                 Rectangle imageRect = new Rectangle(new Point(x, y), new Size(size, size));
 
                 if (images[i] != null)
