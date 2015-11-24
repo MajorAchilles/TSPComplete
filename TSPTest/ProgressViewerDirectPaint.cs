@@ -28,14 +28,14 @@ namespace TSPTest
             this.maxGenerations = maxGenerations;
             this.eliteCount = eliteCount;
             InitializeComponent();
-            this.DoubleBuffered = true;
             this.population = population;
+            images = new Bitmap[population.Count()];
+
             bwAlgorithm = new BackgroundWorker();
             bwAlgorithm.WorkerReportsProgress = true;
             bwAlgorithm.WorkerSupportsCancellation = true;
             bwAlgorithm.DoWork += BwAlgorithm_DoWork;
             bwAlgorithm.ProgressChanged += BwAlgorithm_ProgressChanged;
-            images = new Bitmap[16];
 
             ga = new TSPGeneticAlgorithm(population, population.Count(), mutationChance, eliteCount);
         }
@@ -105,24 +105,26 @@ namespace TSPTest
 
             for (int i = 0; i < regions.Count(); i++)
             {
+                Rectangle region = regions[i];
                 if (i == 0)
-                    g.FillRectangle(Brushes.LightGreen, regions[i]);
+                    g.FillRectangle(Brushes.LightGreen, new Rectangle(region.X+1, region.Y+1, region.Width-1, region.Height-1));
                 else
                     if (i == 15)
-                    g.FillRectangle(Brushes.LightPink, regions[i]);
-                else
-                    g.DrawRectangle(Pens.Black, regions[i]);
+                    g.FillRectangle(Brushes.LightPink, new Rectangle(region.X + 1, region.Y + 1, region.Width - 1, region.Height - 1));
+
+               g.DrawRectangle(Pens.Black, new Rectangle(region.X + 1, region.Y + 1, region.Width - 1, region.Height - 1));
 
                 int size = 0;
-                if (regions[i].Width > regions[0].Height)
-                    size = regions[i].Height;
+                if (region.Width > region.Height)
+                    size = region.Height-4;
                 else
-                    size = regions[i].Width;
-                int x = regions[i].Left + ((regions[i].Width - size) / 2); //x y adjusted relative to each region
-                int y = regions[i].Top + ((regions[i].Height - size) / 2);
+                    size = region.Width-4;
+
+                int x = region.Left + ((region.Width - size) / 2); //x y adjusted relative to each region
+                int y = region.Top + ((region.Height - size) / 2);
                 string distanceString = "Distance: " + Environment.NewLine + Math.Round(population[i].Fitness, 2);
-                g.DrawString(distanceString, this.Font, Brushes.Black, new Point(regions[i].X + 10, regions[i].Y + 10));
-                Rectangle imageRect = new Rectangle(new Point(x, y), new Size(size, size));
+                g.DrawString(distanceString, this.Font, Brushes.Black, new Point(region.X + 10, region.Y + 10));
+                Rectangle imageRect = new Rectangle(new Point(x+1, y+1), new Size(size, size));
 
                 if (images[i] != null)
                     g.DrawImage(images[i], imageRect);
@@ -162,7 +164,7 @@ namespace TSPTest
                 x = 0;
                 for (int j = 0; j < 4; j++)
                 {
-                    Rectangle region = new Rectangle(x, y, widths, heights);
+                    Rectangle region = new Rectangle(x+1, y+1, widths-1, heights-1);
                     regions[counter++] = region;
                     x += widths;
                 }
