@@ -60,6 +60,12 @@
     <Compile Include="ProgressViewerDirectPaint.Designer.cs">
       <DependentUpon>ProgressViewerDirectPaint.cs</DependentUpon>
     </Compile>
+    <Compile Include="TSPManualCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TSPManualCreator.designer.cs">
+      <DependentUpon>TSPManualCreator.cs</DependentUpon>
+    </Compile>
     <Compile Include="SolutionViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +88,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressViewerDirectPaint.resx">
       <DependentUpon>ProgressViewerDirectPaint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TSPManualCreator.resx">
+      <DependentUpon>TSPManualCreator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SolutionViewer.resx">
       <DependentUpon>SolutionViewer.cs</DependentUpon>

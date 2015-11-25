@@ -39,7 +39,7 @@
             this.canvas.Name = "canvas";
             this.canvas.Size = new System.Drawing.Size(1036, 573);
             this.canvas.TabIndex = 0;
-            this.canvas.Click += new System.EventHandler(this.canvas_Click);
+            this.canvas.Click += new System.EventHandler(this.Canvas_Click);
             // 
             // ProgressViewerDirectPaint
             // 

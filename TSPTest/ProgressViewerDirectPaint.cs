@@ -132,11 +132,10 @@ namespace TSPTest
                 if (images[i] != null)
                     g.DrawImage(images[i], imageRect);
             }
-
             g.DrawString(data, this.Font, Brushes.Black, new Point(10, canvas.Bottom - 100));
         }
 
-        private void canvas_Click(object sender, EventArgs e)
+        private void Canvas_Click(object sender, EventArgs e)
         {
             Point position = canvas.PointToClient(Cursor.Position);
             Rectangle[] regions = GetRegions();
@@ -151,7 +150,10 @@ namespace TSPTest
             }
 
             if (index >= 0)
-                new SolutionViewer(population[index]).Show();
+            {
+                SolutionViewer solViewer = new SolutionViewer(population[index]);
+                solViewer.Show();
+            }
         }
 
         private Rectangle[] GetRegions()

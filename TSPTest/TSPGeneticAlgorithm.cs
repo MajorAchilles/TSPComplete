@@ -17,7 +17,7 @@ namespace TSPTest
         public int populationSize;
         public int maxGenerations;
         public int mutationChance;
-        public int eliteCount;
+        public int elitePercentage;
         public CrossOverMethod crossOverMethod;
     }
 
@@ -41,21 +41,14 @@ namespace TSPTest
             this.options = options;
             this.population = options.population;
             generationCount = 1;
-            elitePopulation = new Organism[options.eliteCount];
+            elitePopulation = new Organism[options.elitePercentage];
         }
 
         public Organism[] GetNextGeneration()
         {
             generationCount++;
             List<Organism> populationList = population.ToList();
-            populationList.Sort();
-
-            for(int i = 0; i<options.eliteCount; i++)
-            {
-                elitePopulation[i] = populationList[i];
-            }
-
-            populationList = CrossOver(populationList);
+            CrossOver(populationList);
 
             for (int i = 0; i<populationList.Count; i++)
             {
@@ -63,113 +56,168 @@ namespace TSPTest
                     populationList[i] = Mutate(populationList[i]);
             }
 
-            populationList.Sort();
-
-            int lastIndex = populationList.Count - 1;
-            for(int i = 0; i<options.eliteCount; i++)
-            {
-                populationList[lastIndex - i] = elitePopulation[i];
-            }
-
-            populationList.Sort();
-
             population = populationList.ToArray();
             return population;
         }
 
-        private List<Organism> CrossOver(List<Organism> populationList)
+        private void CrossOver(List<Organism> populationList)
         {
-            List<Organism> newList = new List<Organism>();
+            populationList.Sort();
 
-            while (newList.Count < options.populationSize)
+            if (options.elitePercentage != 100)
             {
-                Organism parent1 = populationList[random.Next(0, populationList.Count)];
-                Organism parent2 = populationList[random.Next(0, populationList.Count)];
-                if (options.crossOverMethod == CrossOverMethod.Random)
-                    newList.Add(RandomCrossOver(parent1, parent2));
-                else
-                    newList.Add(GreedyCrossOver(parent1, parent2));
+                List<Organism> newList = new List<Organism>();
+                newList = populationList.ToList();
+
+                double popCount = populationList.Count;
+                double percentage = options.elitePercentage;
+                int num = (int)((percentage / 100D) * popCount);
+                num = (int)popCount - num;
+                newList.RemoveRange(newList.Count - num, num);
+
+                while (newList.Count < options.populationSize)
+                {
+                    Organism parent1 = populationList[random.Next(0, populationList.Count)];
+                    Organism parent2 = populationList[random.Next(0, populationList.Count)];
+                    if (options.crossOverMethod == CrossOverMethod.Random)
+                        newList.Add(CrossOverRandom(parent1, parent2));
+                    else
+                        newList.Add(CrossOverGreedy(parent1, parent2));
+                }
+                populationList = newList;
+
             }
-            return newList;
+            populationList.Sort();
         }
 
-        private Organism RandomCrossOver(Organism parent1, Organism parent2)
+        private Organism CrossOverRandom(Organism parent1, Organism parent2)
         {
-            Organism randomSolution = new Organism();
-            while (randomSolution.Tour.Count != parent1.Tour.Count)
+            Organism solution = new Organism();
+            while (solution.Tour.Count != parent1.Tour.Count)
             {
-                if (random.Next(0, 2) == 1)
-                {
+                if (random.Next(0, 2) == 1) //Pick a city from parent1
                     while (true)
                     {
                         Point city = parent1.Tour[random.Next(parent1.Tour.Count)];
-                        if (!randomSolution.Tour.Contains(city))
+                        if (!solution.Tour.Contains(city))        //Already have this city, pick another
                         {
-                            randomSolution.Tour.Add(city);
+                            solution.Tour.Add(city);
                             break;
                         }
                     }
-                }
-                else
-                {
+                else                    //Pick a city from parent 2
                     while (true)
                     {
                         Point city = parent2.Tour[random.Next(parent1.Tour.Count)];
-                        if (!randomSolution.Tour.Contains(city))
+                        if (!solution.Tour.Contains(city))        //Already have this city, pick another
                         {
-                            randomSolution.Tour.Add(city);
+                            solution.Tour.Add(city);
                             break;
                         }
                     }
-                }
             }
 
-            randomSolution.Fitness = randomSolution.Tour.GetTourDistance();
-            return randomSolution;
+            solution.Fitness = solution.Tour.GetTourDistance();
+            return solution;
         }
 
-        private Organism GreedyCrossOver(Organism parent1, Organism parent2)
+        private Organism CrossOverGreedy(Organism parent1, Organism parent2)
         {
-            List<Point> parent1Chromosome = parent1.Tour.ToList();
-            List<Point> parent2Chromosome = parent2.Tour.ToList();
-            Organism randomSolution = new Organism();
+            int tourCount = parent1.Tour.Count;
+            List<Point> parent1Cities = parent1.Tour.ToList();
+            List<Point> parent2Cities = parent2.Tour.ToList();
 
-            while (parent1Chromosome.Count > 0 && parent2Chromosome.Count > 0)
+            Organism solution = new Organism();
+
+            while (solution.Tour.Count < tourCount)
             {
-                if (random.Next(0, 2) > 0)
+                if(parent1Cities.Count>1 && parent2Cities.Count>1)
                 {
-                    int index = random.Next(0, parent2Chromosome.Count);
-                    Point city = parent2Chromosome[index];
-                    randomSolution.Tour.Add(city);
-                    parent2Chromosome.Remove(city);
+                    int i = random.Next(0, parent1Cities.Count);
+                    Point city = parent1Cities[i];
+
+                    Point next1 = parent1Cities[0];
+                    if (i < parent1Cities.Count - 1)
+                        next1 = parent1Cities[i + 1];
+
+                    int indexNext2 = parent2Cities.IndexOf(city) + 1;
+                    if (indexNext2 == parent2Cities.Count)
+                        indexNext2 = 0;
+                    Point next2 = parent2Cities[indexNext2];
+                    double distance1 = city.GetDistance(next1);
+                    double distance2 = city.GetDistance(next2);
+
+                    solution.Tour.Add(city);
+                    parent1Cities.Remove(city);
+                    parent2Cities.Remove(city);
+
+                    if (distance1 < distance2) //parent 1 tour is closer
+                    {
+                        solution.Tour.Add(next1);
+                        parent1Cities.Remove(next1);
+                        parent2Cities.Remove(next1);
+                    }
+                    else                    //parent 2 tour is closer
+                    {
+                        solution.Tour.Add(next2);
+                        parent1Cities.Remove(next2);
+                        parent2Cities.Remove(next2);
+                    }
                 }
-                else
+
+                if (parent1Cities.Count > 1)
                 {
-                    int index = random.Next(0, parent1Chromosome.Count);
-                    Point city = parent1Chromosome[index];
-                    randomSolution.Tour.Add(city);
-                    parent1Chromosome.Remove(city);
+                    int i = random.Next(0, parent1Cities.Count);
+                    Point city = parent1Cities[i];
+                    Point next = parent1Cities[0];
+                    if (i < parent1Cities.Count - 1)
+                        next = parent1Cities[i + 1];
+
+                    solution.Tour.Add(city);
+                    parent1Cities.Remove(city);
+                    parent2Cities.Remove(city);
+
+                    solution.Tour.Add(next);
+                    parent1Cities.Remove(next);
+                    parent2Cities.Remove(next);
+                }
+
+                if (parent2Cities.Count > 1)
+                {
+                    int i = random.Next(0, parent2Cities.Count);
+                    Point city = parent2Cities[i];
+
+                    Point next = parent2Cities[0];
+                    if (i < parent2Cities.Count - 1)
+                        next = parent2Cities[i + 1];
+
+                    solution.Tour.Add(city);
+                    parent1Cities.Remove(city);
+                    parent2Cities.Remove(city);
+                    solution.Tour.Add(next);
+                    parent1Cities.Remove(next);
+                    parent2Cities.Remove(next);
+                }
+
+                if (parent1Cities.Count == 1)
+                {
+                    Point city = parent1Cities[0];
+                    solution.Tour.Add(city);
+                    parent1Cities.Remove(city);
+                    parent2Cities.Remove(city);
+                }
+
+                if (parent2Cities.Count == 1)
+                {
+                    Point city = parent2Cities[0];
+                    solution.Tour.Add(city);
+                    parent1Cities.Remove(city);
+                    parent2Cities.Remove(city);
                 }
             }
 
-            while (parent1Chromosome.Count > 0)
-            {
-                int index = random.Next(0, parent1Chromosome.Count);
-                Point city = parent1Chromosome[index];
-                randomSolution.Tour.Add(city);
-                parent1Chromosome.Remove(city);
-            }
-
-            while (parent2Chromosome.Count > 0)
-            {
-                int index = random.Next(0, parent2Chromosome.Count);
-                Point city = parent2Chromosome[index];
-                randomSolution.Tour.Add(city);
-                parent2Chromosome.Remove(city);
-            }
-
-
-            return randomSolution;
+            solution.Fitness = solution.Tour.GetTourDistance();
+            return solution;
         }
 
         private Organism Mutate(Organism organism)

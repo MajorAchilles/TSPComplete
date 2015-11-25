@@ -13,8 +13,6 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (tspImage != null)
-                tspImage.Dispose();
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -34,7 +32,9 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBoxViewPort = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonManual = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
@@ -52,7 +52,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDownCityCount = new System.Windows.Forms.NumericUpDown();
-            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -79,6 +78,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.buttonManual);
             this.splitContainer1.Panel2.Controls.Add(this.buttonLoad);
             this.splitContainer1.Panel2.Controls.Add(this.buttonSave);
             this.splitContainer1.Panel2.Controls.Add(this.label6);
@@ -117,21 +117,38 @@
             this.loadToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
+            this.contextMenuStrip.Size = new System.Drawing.Size(101, 48);
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.Load_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.Save_Click);
+            // 
+            // buttonManual
+            // 
+            this.buttonManual.Location = new System.Drawing.Point(30, 12);
+            this.buttonManual.Name = "buttonManual";
+            this.buttonManual.Size = new System.Drawing.Size(149, 33);
+            this.buttonManual.TabIndex = 0;
+            this.buttonManual.Text = "Manual";
+            this.buttonManual.UseVisualStyleBackColor = true;
+            this.buttonManual.Click += new System.EventHandler(this.ButtonManual_Click);
             // 
             // buttonLoad
             // 
             this.buttonLoad.Location = new System.Drawing.Point(30, 532);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(149, 41);
-            this.buttonLoad.TabIndex = 19;
+            this.buttonLoad.TabIndex = 10;
             this.buttonLoad.Text = "Load";
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.Load_Click);
@@ -141,7 +158,7 @@
             this.buttonSave.Location = new System.Drawing.Point(30, 593);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(149, 41);
-            this.buttonSave.TabIndex = 18;
+            this.buttonSave.TabIndex = 11;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.Save_Click);
@@ -170,7 +187,7 @@
             0});
             this.numericUpDownPopulationSize.Name = "numericUpDownPopulationSize";
             this.numericUpDownPopulationSize.Size = new System.Drawing.Size(51, 20);
-            this.numericUpDownPopulationSize.TabIndex = 16;
+            this.numericUpDownPopulationSize.TabIndex = 3;
             this.numericUpDownPopulationSize.Value = new decimal(new int[] {
             100,
             0,
@@ -187,7 +204,7 @@
             this.comboBoxCrossOverMethod.Location = new System.Drawing.Point(91, 307);
             this.comboBoxCrossOverMethod.Name = "comboBoxCrossOverMethod";
             this.comboBoxCrossOverMethod.Size = new System.Drawing.Size(88, 21);
-            this.comboBoxCrossOverMethod.TabIndex = 15;
+            this.comboBoxCrossOverMethod.TabIndex = 7;
             // 
             // label5
             // 
@@ -203,23 +220,18 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(27, 283);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(61, 13);
+            this.label4.Size = new System.Drawing.Size(88, 13);
             this.label4.TabIndex = 13;
-            this.label4.Text = "Elite Count:";
+            this.label4.Text = "Elite Percentage:";
             // 
             // numericUpDownEliteCount
             // 
             this.numericUpDownEliteCount.Location = new System.Drawing.Point(128, 281);
-            this.numericUpDownEliteCount.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
             this.numericUpDownEliteCount.Name = "numericUpDownEliteCount";
             this.numericUpDownEliteCount.Size = new System.Drawing.Size(51, 20);
-            this.numericUpDownEliteCount.TabIndex = 12;
+            this.numericUpDownEliteCount.TabIndex = 6;
             this.numericUpDownEliteCount.Value = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             0});
@@ -248,7 +260,7 @@
             0});
             this.numericUpDownMaxGenerations.Name = "numericUpDownMaxGenerations";
             this.numericUpDownMaxGenerations.Size = new System.Drawing.Size(51, 20);
-            this.numericUpDownMaxGenerations.TabIndex = 10;
+            this.numericUpDownMaxGenerations.TabIndex = 5;
             this.numericUpDownMaxGenerations.Value = new decimal(new int[] {
             300,
             0,
@@ -269,7 +281,7 @@
             this.numericUpDownMutationChance.Location = new System.Drawing.Point(128, 229);
             this.numericUpDownMutationChance.Name = "numericUpDownMutationChance";
             this.numericUpDownMutationChance.Size = new System.Drawing.Size(51, 20);
-            this.numericUpDownMutationChance.TabIndex = 8;
+            this.numericUpDownMutationChance.TabIndex = 4;
             this.numericUpDownMutationChance.Value = new decimal(new int[] {
             100,
             0,
@@ -281,17 +293,17 @@
             this.buttonStart.Location = new System.Drawing.Point(30, 341);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(149, 40);
-            this.buttonStart.TabIndex = 7;
+            this.buttonStart.TabIndex = 8;
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(30, 108);
+            this.button2.Location = new System.Drawing.Point(30, 396);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(149, 40);
-            this.button2.TabIndex = 6;
+            this.button2.TabIndex = 9;
             this.button2.Text = "View A Solution";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.ButtonViewSolution_Click);
@@ -307,10 +319,10 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(30, 12);
+            this.button1.Location = new System.Drawing.Point(30, 99);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(149, 33);
-            this.button1.TabIndex = 0;
+            this.button1.TabIndex = 2;
             this.button1.Text = "Regenerate";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.ButtonRegenerate_Click);
@@ -325,20 +337,13 @@
             0});
             this.numericUpDownCityCount.Name = "numericUpDownCityCount";
             this.numericUpDownCityCount.Size = new System.Drawing.Size(51, 20);
-            this.numericUpDownCityCount.TabIndex = 2;
+            this.numericUpDownCityCount.TabIndex = 1;
             this.numericUpDownCityCount.Value = new decimal(new int[] {
             100,
             0,
             0,
             0});
             this.numericUpDownCityCount.ValueChanged += new System.EventHandler(this.NumericUpDownCities_ValueChanged);
-            // 
-            // loadToolStripMenuItem
-            // 
-            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.loadToolStripMenuItem.Text = "Load";
-            this.loadToolStripMenuItem.Click += new System.EventHandler(this.Load_Click);
             // 
             // TSPViewer
             // 
@@ -389,6 +394,7 @@
         private System.Windows.Forms.Button buttonLoad;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private System.Windows.Forms.Button buttonManual;
     }
 }
 

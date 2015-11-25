@@ -28,7 +28,7 @@ namespace TSPTest
 
             this.mutationChance = tspOptions.mutationChance;
             this.maxGenerations = tspOptions.maxGenerations;
-            this.eliteCount = tspOptions.eliteCount;
+            this.eliteCount = tspOptions.elitePercentage;
             this.population = tspOptions.population;
             this.DoubleBuffered = true;
             

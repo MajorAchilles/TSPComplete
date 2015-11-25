@@ -8,82 +8,14 @@ using System.Xml;
 
 namespace TSPTest
 {
-    public partial class TSPViewer : Form
+    public partial class TSPManualCreator : Form
     {
-        int cityCount = 100;
         List<Point> cities;
-        TSPGenerator tspGenerator;
-        const int horizontalSize = 700;
-        const int verticalSize = 700;
-        const int border = 0;
-
-        public static int HorizontalSize
-        {
-            get
-            {
-                return horizontalSize;
-            }
-        }
-
-        public static int VerticalSize
-        {
-            get
-            {
-                return verticalSize;
-            }
-        }
-
-        public static int Border
-        {
-            get
-            {
-                return border;
-            }
-        }
-
-        public TSPViewer()
+        public TSPManualCreator()
         {
             InitializeComponent();
-            comboBoxCrossOverMethod.SelectedIndex = 0;
-            tspGenerator = new TSPGenerator(cityCount, HorizontalSize, VerticalSize, Border);
-            cities = tspGenerator.GenerateCities();
-            pictureBoxViewPort.Image = cities.DrawCities();
-        }
-
-        private void ButtonRegenerate_Click(object sender, EventArgs e)
-        {
-            cities = tspGenerator.GenerateCities();
-            pictureBoxViewPort.Image = cities.DrawCities();
-        }
-
-        private void NumericUpDownCities_ValueChanged(object sender, EventArgs e)
-        {
-            tspGenerator.MaxCities = this.cityCount = (int)numericUpDownCityCount.Value;
-        }
-
-        private void ButtonViewSolution_Click(object sender, EventArgs e)
-        {
-            Organism randomSolution = cities.CreateRandomSolution();
-            new SolutionViewer(randomSolution).Show();
-        }
-
-        private void buttonStart_Click(object sender, EventArgs e)
-        {
-            Organism[] population = new Organism[(int)numericUpDownPopulationSize.Value];
-            for (int i = 0; i < population.Count(); i++)
-            {
-                Organism solution = cities.CreateRandomSolution();
-                population[i] = solution;
-            }
-
-            TSPOptions options = new TSPOptions();
-            options.population = population;
-            options.populationSize = (int)numericUpDownPopulationSize.Value;
-            options.maxGenerations = (int)numericUpDownMaxGenerations.Value;
-            options.mutationChance = (int)numericUpDownMutationChance.Value;
-            options.elitePercentage = (int)numericUpDownEliteCount.Value;
-            options.crossOverMethod = (CrossOverMethod)comboBoxCrossOverMethod.SelectedIndex;
-            new ProgressViewerDirectPaint(options).ShowDialog();
+            cities = new List<Point>();
+            Size = MaximumSize = MinimumSize = new Size(TSPViewer.HorizontalSize, TSPViewer.VerticalSize);
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -98,9 +30,9 @@ namespace TSPTest
             sfd.Title = "Save problem image";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                if(sfd.FilterIndex== 0)
+                if (sfd.FilterIndex == 0)
                 {
-                    Bitmap bmp = (Bitmap)pictureBoxViewPort.Image;
+                    Bitmap bmp = (Bitmap)canvas.Image;
                     bmp.Save(sfd.FileName);
                 }
                 else
@@ -120,18 +52,12 @@ namespace TSPTest
             //xmlDoc.Save(ProgramSettings.Paths.ProgramDataConfigPath + "Settings.xml");
             //success = true;
 
-            TSPOptions options = new TSPOptions();
-            options.populationSize = (int)numericUpDownPopulationSize.Value;
-            options.maxGenerations = (int)numericUpDownMaxGenerations.Value;
-            options.mutationChance = (int)numericUpDownMutationChance.Value;
-            options.elitePercentage = (int)numericUpDownEliteCount.Value;
-            options.crossOverMethod = (CrossOverMethod)comboBoxCrossOverMethod.SelectedIndex;
-
             XmlDocument document = new XmlDocument();
-            XmlNode problem = document.CreateElement("problem");
+            XmlNode problem = document.CreateElement("solution");
             XmlAttribute attr = document.CreateAttribute("count");
-            attr.Value = cityCount.ToString();
+            attr.Value = cities.Count.ToString();
             problem.Attributes.Append(attr);
+
             foreach (Point point in cities)
             {
                 XmlNode pointNode = document.CreateElement("point");
@@ -143,6 +69,7 @@ namespace TSPTest
                 pointNode.Attributes.Append(y);
                 problem.AppendChild(pointNode);
             }
+
             document.AppendChild(problem);
             document.Save(fileName);
         }
@@ -183,7 +110,7 @@ namespace TSPTest
                     }
                     cities = xmlCities.ToList();
 
-                    this.pictureBoxViewPort.Image = cities.DrawCities();
+                    //DrawCities();
                 }
                 catch
                 {
@@ -194,9 +121,20 @@ namespace TSPTest
                 MessageBox.Show("File not found!");
         }
 
-        private void ButtonManual_Click(object sender, EventArgs e)
+        private void Canvas_Click(object sender, EventArgs e)
         {
-            new TSPManualCreator().ShowDialog();
+            Point position = canvas.PointToClient(Cursor.Position);
+            cities.Add(position);
+
+            canvas.Image = cities.DrawCities();
+        }
+
+        private void TSPManualCreator_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control && cities.Count > 0)
+                cities.RemoveAt(cities.Count - 1);
+
+            canvas.Image = cities.DrawCities();
         }
     }
 }

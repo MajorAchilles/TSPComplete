@@ -38,6 +38,24 @@ namespace TSPTest
             return tspImage;
         }
 
+        public static Bitmap DrawCities(this List<Point> cities)
+        {
+            Bitmap image = new Bitmap(TSPViewer.HorizontalSize, TSPViewer.VerticalSize);
+
+            Graphics g = Graphics.FromImage(image);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.Clear(Color.White);
+            g.DrawRectangle(Pens.BlueViolet, new Rectangle(TSPViewer.Border, TSPViewer.Border, TSPViewer.HorizontalSize - (TSPViewer.Border * 2) - 1, TSPViewer.VerticalSize - (TSPViewer.Border * 2) - 1));
+
+            foreach (Point location in cities)
+            {
+                g.FillEllipse(Brushes.Black, new Rectangle(location.X - 2, location.Y - 2, 5, 5));
+                g.DrawEllipse(Pens.Black, new Rectangle(location.X - 4, location.Y - 4, 9, 9));
+            }
+
+            return image;
+        }
+
         public static double GetDistance(this Point point1, Point point2)
         {
             if (point1 == null || point2 == null)

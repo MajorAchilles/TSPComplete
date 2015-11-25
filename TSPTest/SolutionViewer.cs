@@ -11,11 +11,41 @@ namespace TSPTest
     public partial class SolutionViewer : Form
     {
         Organism solution;
+        bool updateConstant = false;
+
+        public bool UpdateConstant
+        {
+            get
+            {
+                return updateConstant;
+            }
+
+            set
+            {
+                updateConstant = value;
+            }
+        }
+
+        public Organism Solution
+        {
+            get
+            {
+                return solution;
+            }
+
+            set
+            {
+                solution = value;
+                if (updateConstant)
+                    this.pictureBox.Image = solution.Tour.DrawTour();
+            }
+        }
+
         public SolutionViewer(Organism solution)
         {
             InitializeComponent();
 
-            this.solution = solution;
+            this.Solution = solution;
             this.pictureBox.Image = solution.Tour.DrawTour();
             this.Text = "Distance: " + solution.Fitness;
         }
@@ -57,10 +87,10 @@ namespace TSPTest
             XmlDocument document = new XmlDocument();
             XmlNode problem = document.CreateElement("solution");
             XmlAttribute attr = document.CreateAttribute("count");
-            attr.Value = solution.Tour.Count.ToString();
+            attr.Value = Solution.Tour.Count.ToString();
             problem.Attributes.Append(attr);
 
-            foreach (Point point in solution.Tour)
+            foreach (Point point in Solution.Tour)
             {
                 XmlNode pointNode = document.CreateElement("point");
                 XmlAttribute x = document.CreateAttribute("x");
@@ -110,7 +140,7 @@ namespace TSPTest
                         Point city = new Point(x, y);
                         xmlCities.Add(city);
                     }
-                    solution.Tour = xmlCities.ToList();
+                    Solution.Tour = xmlCities.ToList();
 
                     //DrawCities();
                 }
