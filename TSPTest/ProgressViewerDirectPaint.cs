@@ -14,21 +14,17 @@ namespace TSPTest
         TSPGeneticAlgorithm ga;
         BackgroundWorker bwAlgorithm;
         bool drawing = false;
-        int eliteCount;
-        int mutationChance;
-        int maxGenerations;
+        TSPOptions options;
         String data = null;
 
         private Organism[] population;
         private Bitmap[] images;
 
-        public ProgressViewerDirectPaint(Organism[] population, int maxGenerations, int mutationChance, int eliteCount)
+        public ProgressViewerDirectPaint(TSPOptions options)
         {
-            this.mutationChance = mutationChance;
-            this.maxGenerations = maxGenerations;
-            this.eliteCount = eliteCount;
+            this.options = options;
+            this.population = options.population;
             InitializeComponent();
-            this.population = population;
             images = new Bitmap[population.Count()];
 
             bwAlgorithm = new BackgroundWorker();
@@ -37,7 +33,7 @@ namespace TSPTest
             bwAlgorithm.DoWork += BwAlgorithm_DoWork;
             bwAlgorithm.ProgressChanged += BwAlgorithm_ProgressChanged;
 
-            ga = new TSPGeneticAlgorithm(population, population.Count(), mutationChance, eliteCount);
+            ga = new TSPGeneticAlgorithm(options);
         }
 
         private void ProgressViewer_Load(object sender, EventArgs e)
@@ -74,10 +70,10 @@ namespace TSPTest
         {
             BackgroundWorker worker = sender as BackgroundWorker;
 
-            while (ga.GenerationNo <= maxGenerations)
+            while (ga.GenerationNo <= options.maxGenerations)
             {
                 worker.ReportProgress(ga.GenerationNo);
-                Thread.Sleep(150); //100 miliseconds for creating image. 50 for drawing.
+                Thread.Sleep(250); //100 miliseconds for creating image. 50 for drawing.
                 while (drawing)
                 {
                 }
@@ -91,7 +87,14 @@ namespace TSPTest
         private void ProgressViewer_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (MessageBox.Show("Quit?", "Quit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                if (bwAlgorithm != null)
+                {
+                    bwAlgorithm.CancelAsync();
+                    bwAlgorithm.Dispose();
+                }
                 e.Cancel = false;
+            }
             else
                 e.Cancel = true;
         }

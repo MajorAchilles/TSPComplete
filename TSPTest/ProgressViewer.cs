@@ -22,21 +22,23 @@ namespace TSPTest
 
         private Organism[] population;
 
-        public ProgressViewer(Organism[] population, int maxGenerations, int mutationChance, int eliteCount)
+        public ProgressViewer(TSPOptions tspOptions)
         {
-            this.mutationChance = mutationChance;
-            this.maxGenerations = maxGenerations;
-            this.eliteCount = eliteCount;
             InitializeComponent();
+
+            this.mutationChance = tspOptions.mutationChance;
+            this.maxGenerations = tspOptions.maxGenerations;
+            this.eliteCount = tspOptions.eliteCount;
+            this.population = tspOptions.population;
             this.DoubleBuffered = true;
-            this.population = population;
+            
             bwAlgorithm = new BackgroundWorker();
             bwAlgorithm.WorkerReportsProgress = true;
             bwAlgorithm.WorkerSupportsCancellation = true;
             bwAlgorithm.DoWork += BwAlgorithm_DoWork;
             bwAlgorithm.ProgressChanged += BwAlgorithm_ProgressChanged;
 
-            ga = new TSPGeneticAlgorithm(population, population.Count(), mutationChance, eliteCount);
+            ga = new TSPGeneticAlgorithm(tspOptions);
         }
 
         private void DrawPopulation()

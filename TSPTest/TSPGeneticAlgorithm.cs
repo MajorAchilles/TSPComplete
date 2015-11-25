@@ -5,16 +5,29 @@ using System.Linq;
 
 namespace TSPTest
 {
+    public enum CrossOverMethod
+    {
+        Random,
+        Greedy
+    }
+
+    public class TSPOptions
+    {
+        public Organism[] population;
+        public int populationSize;
+        public int maxGenerations;
+        public int mutationChance;
+        public int eliteCount;
+        public CrossOverMethod crossOverMethod;
+    }
+
     class TSPGeneticAlgorithm
     {
         Organism[] population;
-        int maxSize;
-        int eliteCount;
-        int generationCount;
-        int mutateChance;
-        Random random = new Random();
         Organism[] elitePopulation;
-
+        Random random = new Random();
+        TSPOptions options;
+        int generationCount;
         public int GenerationNo
         {
             get
@@ -23,14 +36,12 @@ namespace TSPTest
             }
         }
 
-        public TSPGeneticAlgorithm(Organism[] initialPopulation, int maxPopulationSize, int mutationChance, int eliteCount)
+        public TSPGeneticAlgorithm(TSPOptions options)
         {
-            this.population = initialPopulation;
-            this.maxSize = maxPopulationSize;
-            this.eliteCount = eliteCount;
-            this.mutateChance = mutationChance;
+            this.options = options;
+            this.population = options.population;
             generationCount = 1;
-            elitePopulation = new Organism[eliteCount];
+            elitePopulation = new Organism[options.eliteCount];
         }
 
         public Organism[] GetNextGeneration()
@@ -39,7 +50,7 @@ namespace TSPTest
             List<Organism> populationList = population.ToList();
             populationList.Sort();
 
-            for(int i = 0; i<eliteCount; i++)
+            for(int i = 0; i<options.eliteCount; i++)
             {
                 elitePopulation[i] = populationList[i];
             }
@@ -48,14 +59,14 @@ namespace TSPTest
 
             for (int i = 0; i<populationList.Count; i++)
             {
-                if(random.Next(0, 101)<mutateChance)
+                if(random.Next(0, 101)<options.mutationChance)
                     populationList[i] = Mutate(populationList[i]);
             }
 
             populationList.Sort();
 
             int lastIndex = populationList.Count - 1;
-            for(int i = 0; i<eliteCount; i++)
+            for(int i = 0; i<options.eliteCount; i++)
             {
                 populationList[lastIndex - i] = elitePopulation[i];
             }
@@ -70,13 +81,15 @@ namespace TSPTest
         {
             List<Organism> newList = new List<Organism>();
 
-            while (newList.Count < maxSize)
+            while (newList.Count < options.populationSize)
             {
                 Organism parent1 = populationList[random.Next(0, populationList.Count)];
                 Organism parent2 = populationList[random.Next(0, populationList.Count)];
-                newList.Add(RandomCrossOver(parent1, parent2));
+                if (options.crossOverMethod == CrossOverMethod.Random)
+                    newList.Add(RandomCrossOver(parent1, parent2));
+                else
+                    newList.Add(GreedyCrossOver(parent1, parent2));
             }
-
             return newList;
         }
 
@@ -115,7 +128,7 @@ namespace TSPTest
             return randomSolution;
         }
 
-        private Organism SelectiveCrossOver(Organism parent1, Organism parent2)
+        private Organism GreedyCrossOver(Organism parent1, Organism parent2)
         {
             List<Point> parent1Chromosome = parent1.Tour.ToList();
             List<Point> parent2Chromosome = parent2.Tour.ToList();
