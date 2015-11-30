@@ -34,6 +34,7 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxEliteOnly = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label8 = new System.Windows.Forms.Label();
             this.numericUpDownMutationIndividual = new System.Windows.Forms.NumericUpDown();
@@ -57,7 +58,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDownCityCount = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxEliteOnly = new System.Windows.Forms.CheckBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -141,17 +141,29 @@
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.Save_Click);
             // 
+            // checkBoxEliteOnly
+            // 
+            this.checkBoxEliteOnly.AutoSize = true;
+            this.checkBoxEliteOnly.Checked = true;
+            this.checkBoxEliteOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEliteOnly.Location = new System.Drawing.Point(30, 404);
+            this.checkBoxEliteOnly.Name = "checkBoxEliteOnly";
+            this.checkBoxEliteOnly.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxEliteOnly.TabIndex = 21;
+            this.checkBoxEliteOnly.Text = "View Elite Only";
+            this.checkBoxEliteOnly.UseVisualStyleBackColor = true;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.numericUpDownMutationIndividual);
             this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.comboBoxMutationMethod);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.comboBoxMutationMethod);
             this.groupBox1.Controls.Add(this.numericUpDownMutationPopulation);
             this.groupBox1.Location = new System.Drawing.Point(11, 277);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(186, 103);
+            this.groupBox1.Size = new System.Drawing.Size(186, 79);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Mutation:";
@@ -159,7 +171,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(16, 77);
+            this.label8.Location = new System.Drawing.Point(16, 54);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(63, 13);
             this.label8.TabIndex = 21;
@@ -167,7 +179,7 @@
             // 
             // numericUpDownMutationIndividual
             // 
-            this.numericUpDownMutationIndividual.Location = new System.Drawing.Point(117, 75);
+            this.numericUpDownMutationIndividual.Location = new System.Drawing.Point(117, 52);
             this.numericUpDownMutationIndividual.Name = "numericUpDownMutationIndividual";
             this.numericUpDownMutationIndividual.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownMutationIndividual.TabIndex = 20;
@@ -180,28 +192,30 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(16, 16);
+            this.label7.Location = new System.Drawing.Point(16, 82);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(51, 13);
             this.label7.TabIndex = 19;
             this.label7.Text = "Mutation:";
+            this.label7.Visible = false;
             // 
             // comboBoxMutationMethod
             // 
             this.comboBoxMutationMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxMutationMethod.FormattingEnabled = true;
             this.comboBoxMutationMethod.Items.AddRange(new object[] {
-            "Greedy",
+            "Swap Neighbour",
             "2opt"});
-            this.comboBoxMutationMethod.Location = new System.Drawing.Point(80, 13);
+            this.comboBoxMutationMethod.Location = new System.Drawing.Point(73, 79);
             this.comboBoxMutationMethod.Name = "comboBoxMutationMethod";
-            this.comboBoxMutationMethod.Size = new System.Drawing.Size(88, 21);
+            this.comboBoxMutationMethod.Size = new System.Drawing.Size(95, 21);
             this.comboBoxMutationMethod.TabIndex = 18;
+            this.comboBoxMutationMethod.Visible = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 48);
+            this.label1.Location = new System.Drawing.Point(16, 25);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(68, 13);
             this.label1.TabIndex = 9;
@@ -209,7 +223,7 @@
             // 
             // numericUpDownMutationPopulation
             // 
-            this.numericUpDownMutationPopulation.Location = new System.Drawing.Point(117, 46);
+            this.numericUpDownMutationPopulation.Location = new System.Drawing.Point(117, 23);
             this.numericUpDownMutationPopulation.Name = "numericUpDownMutationPopulation";
             this.numericUpDownMutationPopulation.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownMutationPopulation.TabIndex = 4;
@@ -410,18 +424,6 @@
             0,
             0});
             this.numericUpDownCityCount.ValueChanged += new System.EventHandler(this.NumericUpDownCities_ValueChanged);
-            // 
-            // checkBoxEliteOnly
-            // 
-            this.checkBoxEliteOnly.AutoSize = true;
-            this.checkBoxEliteOnly.Checked = true;
-            this.checkBoxEliteOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxEliteOnly.Location = new System.Drawing.Point(30, 404);
-            this.checkBoxEliteOnly.Name = "checkBoxEliteOnly";
-            this.checkBoxEliteOnly.Size = new System.Drawing.Size(96, 17);
-            this.checkBoxEliteOnly.TabIndex = 21;
-            this.checkBoxEliteOnly.Text = "View Elite Only";
-            this.checkBoxEliteOnly.UseVisualStyleBackColor = true;
             // 
             // TSPViewer
             // 

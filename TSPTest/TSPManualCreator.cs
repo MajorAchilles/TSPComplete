@@ -22,7 +22,7 @@ namespace TSPTest
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.FileName = "Problem";
-            sfd.Filter = "Bitmap File (*.bmp)|*.bmp |XML File (*.xml)|*.xml";
+            sfd.Filter = "Bitmap File (*.bmp)|*.bmp|XML File (*.xml)|*.xml";
             sfd.FilterIndex = 0;
             sfd.RestoreDirectory = true;
             sfd.OverwritePrompt = true;
@@ -30,7 +30,7 @@ namespace TSPTest
             sfd.Title = "Save problem image";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                if (sfd.FilterIndex == 0)
+                if (sfd.FilterIndex == 1)
                 {
                     Bitmap bmp = (Bitmap)canvas.Image;
                     bmp.Save(sfd.FileName);

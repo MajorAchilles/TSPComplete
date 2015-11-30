@@ -14,7 +14,7 @@ namespace TSPTest
 
     public enum MutationMethod
     {
-        Greedy,
+        SwapNeighbour,
         Opt2
     }
 
@@ -37,6 +37,7 @@ namespace TSPTest
         static Random random = new Random();
         TSPOptions options;
         int generationCount;
+
         public int GenerationNo
         {
             get
@@ -91,7 +92,7 @@ namespace TSPTest
                     else if (options.crossOverMethod == CrossOverMethod.Greedy)
                         child = CrossOverGreedy(parent1, parent2);
                     else
-                        child = CrossOverSubtour(parent1, parent2);
+                        child = CrossOverSubtourVersion2(parent1, parent2);
                     newList.Add(child);
                 }
 
@@ -105,20 +106,31 @@ namespace TSPTest
 
                 if (i == 0) //Always mutate elite.
                 {
-                    if (options.mutationMethod == MutationMethod.Greedy)
-                        child = MutateGreedy(child);
-                    else
-                        child = Mutate2Opt(child);
+                    child = MutateTwoOpt(child);
+                    child = MutateSwapNeighbour(child);
+                    //if (options.mutationMethod == MutationMethod.SwapNeighbour)
+                    //    child = MutateSwapNeighbour(child);
+                    //else
+                    //{
+                    //    child = MutateTwoOpt(child);
+                    //    child = MutateSwapNeighbour(child);
+                    //}
                 }
                 else
                 {
                     if (random.Next(0, 101) <= options.mutationPopulationPercentage) //MUTATE
-                        if (options.mutationMethod == MutationMethod.Greedy)
-                            child = MutateGreedy(child);
-                        else
-                            child = Mutate2Opt(child);
+                    {
+                        child = MutateTwoOpt(child);
+                        child = MutateSwapNeighbour(child);
+                    }
+                    //if (options.mutationMethod == MutationMethod.SwapNeighbour)
+                    //    child = MutateSwapNeighbour(child);
+                    //else
+                    //{
+                    //    child = MutateTwoOpt(child);
+                    //    child = MutateSwapNeighbour(child);
+                    //}
                 }
-
                 populationList[i] = child;
             }
 
@@ -186,6 +198,30 @@ namespace TSPTest
             return solution;
         }
 
+        private Organism CrossOverSubtourVersion2(Organism parent1, Organism parent2)
+        {
+            int n = parent1.Tour.Count;
+            int start = random.Next(0, n);
+            int end = 0;
+            while (end < start)
+                end = random.Next(0, n);
+
+            Organism solution = new Organism();
+
+            for(int i = start; i<=end; i++)
+            {
+                solution.Tour.Add(parent1.Tour[i]);
+            }
+
+            for(int j = 0; j< n;j++)
+            {
+                if (!solution.Tour.Contains(parent2.Tour[j]))
+                    solution.Tour.Add(parent2.Tour[j]);
+            }
+
+            return solution;
+        }
+
         private Organism CrossOverRandom(Organism parent1, Organism parent2)
         {
             Organism solution = new Organism();
@@ -217,7 +253,8 @@ namespace TSPTest
             return solution;
         }
 
-        private Organism CrossOverGreedy(Organism parent1, Organism parent2) // NOT GREEDY ENOUGH. MAKE MORE GREEDY.
+        // NOT GREEDY ENOUGH. MAKE MORE GREEDY.
+        private Organism CrossOverGreedy(Organism parent1, Organism parent2)
         {
             //The swapping here deals with only two nodes. Which may not always lead to a 
             //optimal local solution. Need to come up with a way to work globally.
@@ -318,43 +355,35 @@ namespace TSPTest
             return solution;
         }
 
-        private Organism MutateGreedy(Organism organism)
+        private Organism MutateSwapNeighbour(Organism organism)
         {
             if (organism.Tour.Count > 1)
             {
                 double current = organism.Fitness;
 
-                int index = random.Next(0, organism.Tour.Count);
-                int next;
-                if (index == 0) //First
-                    if (random.Next(0, 2) == 0) //Next or last
-                        next = index + 1;
-                    else
-                        next = organism.Tour.Count - 1;
-                else if (index == organism.Tour.Count - 1) //last
-                    if (random.Next(0, 2) == 0) //Previous or first
-                        next = index - 1;
-                    else
-                        next = 0;
-                else //All in between
-                    if (random.Next(0, 2) == 0) //Previous or next
-                    next = index - 1;
-                else
-                    next = index + 1;
-
-                organism.Tour.Swap(index, next);
-                organism.Fitness = organism.Tour.GetTourDistance();
-
-                if (organism.Fitness > current) //If mutation wasn't beneficial
+                int index = 0;
+                while (index < organism.Tour.Count)
                 {
+                    int next = index + 1;
+
+                    if (index == organism.Tour.Count - 1)
+                        next = 0;
+
                     organism.Tour.Swap(index, next);
-                    organism.Fitness = organism.Tour.GetTourDistance();
+
+                    if (organism.Fitness >= current) //If mutation wasn't beneficial
+                    {
+                        organism.Tour.Swap(index, next);
+                        organism.Fitness = organism.Tour.GetTourDistance();
+                    }
+
+                    index++;
                 }
             }
             return organism;
         }
 
-        private Organism Mutate2Opt(Organism organism)
+        private Organism MutateTwoOpt(Organism organism)
         {
             int i = 0;
             double tourLength = organism.Tour.Count;
@@ -386,18 +415,28 @@ namespace TSPTest
                     Point t22 = organism.Tour[i22];
 
                     double originalDistance = Utils.GetDistance(t11, t12) + Utils.GetDistance(t21, t22);
-                    double newDistance = Utils.GetDistance(t11, t22) + Utils.GetDistance(t21, t12);
+                    double newDistanceHorizontal = Utils.GetDistance(t11, t22) + Utils.GetDistance(t21, t12); //swap 12, 22
+                    double newDistanceVertical = Utils.GetDistance(t11, t21) + Utils.GetDistance(t22, t12); //swap 12, 21
 
-
-                    if (newDistance < originalDistance)
-                    {
-                        Organism mutated = new Organism();
-                        mutated.Tour = organism.Tour.ToList();
-                        mutated.Tour.Swap(i12, i22);
-                        mutated.Fitness = mutated.Tour.GetTourDistance();
-                        if (mutated.Fitness < organism.Fitness)
-                            organism = mutated;
-                    }
+                    if (newDistanceHorizontal < originalDistance || newDistanceVertical < originalDistance)
+                        if (newDistanceHorizontal < newDistanceVertical)
+                        {
+                            Organism mutated = new Organism();
+                            mutated.Tour = organism.Tour.ToList();
+                            mutated.Tour.Swap(i12, i22);
+                            mutated.Fitness = mutated.Tour.GetTourDistance();
+                            if (mutated.Fitness < organism.Fitness)
+                                organism = mutated;
+                        }
+                        else
+                        {
+                            Organism mutated = new Organism();
+                            mutated.Tour = organism.Tour.ToList();
+                            mutated.Tour.Swap(i12, i21);
+                            mutated.Fitness = mutated.Tour.GetTourDistance();
+                            if (mutated.Fitness < organism.Fitness)
+                                organism = mutated;
+                        }
                 }
                 i++;
             }

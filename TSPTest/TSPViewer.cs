@@ -13,8 +13,8 @@ namespace TSPTest
         int cityCount = 30;
         List<Point> cities;
         TSPGenerator tspGenerator;
-        const int horizontalSize = 1200;
-        const int verticalSize = 1200;
+        const int horizontalSize = 900;
+        const int verticalSize = 900;
         const int border = 10;
 
         public static int HorizontalSize
@@ -97,7 +97,7 @@ namespace TSPTest
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.FileName = "Problem";
-            sfd.Filter = "Bitmap File (*.bmp)|*.bmp |XML File (*.xml)|*.xml";
+            sfd.Filter = "Bitmap File (*.bmp)|*.bmp|XML File (*.xml)|*.xml";
             sfd.FilterIndex = 0;
             sfd.RestoreDirectory = true;
             sfd.OverwritePrompt = true;
@@ -105,7 +105,7 @@ namespace TSPTest
             sfd.Title = "Save problem image";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                if(sfd.FilterIndex== 0)
+                if (sfd.FilterIndex == 1)
                 {
                     Bitmap bmp = (Bitmap)pictureBoxViewPort.Image;
                     bmp.Save(sfd.FileName);

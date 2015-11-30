@@ -119,5 +119,10 @@ namespace TSPTest
             if (e.KeyCode == Keys.Escape)
                 this.Close();
         }
+
+        private void canvas_Click(object sender, EventArgs e)
+        {
+            new SolutionViewer(this.population[0]).Show();
+        }
     }
 }

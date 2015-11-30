@@ -39,14 +39,15 @@
             this.canvas.Name = "canvas";
             this.canvas.Size = new System.Drawing.Size(1036, 573);
             this.canvas.TabIndex = 0;
+            this.canvas.Click += new System.EventHandler(this.canvas_Click);
             // 
-            // ProgressViewerDirectPaint
+            // ProgressViewerElite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1036, 573);
             this.Controls.Add(this.canvas);
-            this.Name = "ProgressViewerDirectPaint";
+            this.Name = "ProgressViewerElite";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ProgressViewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
