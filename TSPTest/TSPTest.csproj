@@ -54,6 +54,12 @@
       <DependentUpon>ProgressViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Organism.cs" />
+    <Compile Include="ProgressViewerElite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressViewerElite.Designer.cs">
+      <DependentUpon>ProgressViewerElite.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProgressViewerDirectPaint.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +91,9 @@
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="ProgressViewer.resx">
       <DependentUpon>ProgressViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressViewerElite.resx">
+      <DependentUpon>ProgressViewerElite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressViewerDirectPaint.resx">
       <DependentUpon>ProgressViewerDirectPaint.cs</DependentUpon>

@@ -34,6 +34,13 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDownMutationIndividual = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.comboBoxMutationMethod = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDownMutationPopulation = new System.Windows.Forms.NumericUpDown();
             this.buttonManual = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
@@ -45,22 +52,23 @@
             this.numericUpDownEliteCount = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDownMaxGenerations = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDownMutationChance = new System.Windows.Forms.NumericUpDown();
             this.buttonStart = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.numericUpDownCityCount = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxEliteOnly = new System.Windows.Forms.CheckBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxViewPort)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutationIndividual)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutationPopulation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPopulationSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEliteCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxGenerations)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutationChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCityCount)).BeginInit();
             this.SuspendLayout();
             // 
@@ -78,6 +86,8 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.checkBoxEliteOnly);
+            this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
             this.splitContainer1.Panel2.Controls.Add(this.buttonManual);
             this.splitContainer1.Panel2.Controls.Add(this.buttonLoad);
             this.splitContainer1.Panel2.Controls.Add(this.buttonSave);
@@ -89,8 +99,6 @@
             this.splitContainer1.Panel2.Controls.Add(this.numericUpDownEliteCount);
             this.splitContainer1.Panel2.Controls.Add(this.label3);
             this.splitContainer1.Panel2.Controls.Add(this.numericUpDownMaxGenerations);
-            this.splitContainer1.Panel2.Controls.Add(this.label1);
-            this.splitContainer1.Panel2.Controls.Add(this.numericUpDownMutationChance);
             this.splitContainer1.Panel2.Controls.Add(this.buttonStart);
             this.splitContainer1.Panel2.Controls.Add(this.button2);
             this.splitContainer1.Panel2.Controls.Add(this.label2);
@@ -133,6 +141,84 @@
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.Save_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.numericUpDownMutationIndividual);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.comboBoxMutationMethod);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.numericUpDownMutationPopulation);
+            this.groupBox1.Location = new System.Drawing.Point(11, 277);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(186, 103);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Mutation:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 77);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(63, 13);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "Individual %";
+            // 
+            // numericUpDownMutationIndividual
+            // 
+            this.numericUpDownMutationIndividual.Location = new System.Drawing.Point(117, 75);
+            this.numericUpDownMutationIndividual.Name = "numericUpDownMutationIndividual";
+            this.numericUpDownMutationIndividual.Size = new System.Drawing.Size(51, 20);
+            this.numericUpDownMutationIndividual.TabIndex = 20;
+            this.numericUpDownMutationIndividual.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(16, 16);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(51, 13);
+            this.label7.TabIndex = 19;
+            this.label7.Text = "Mutation:";
+            // 
+            // comboBoxMutationMethod
+            // 
+            this.comboBoxMutationMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxMutationMethod.FormattingEnabled = true;
+            this.comboBoxMutationMethod.Items.AddRange(new object[] {
+            "Greedy",
+            "2opt"});
+            this.comboBoxMutationMethod.Location = new System.Drawing.Point(80, 13);
+            this.comboBoxMutationMethod.Name = "comboBoxMutationMethod";
+            this.comboBoxMutationMethod.Size = new System.Drawing.Size(88, 21);
+            this.comboBoxMutationMethod.TabIndex = 18;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 48);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Population %";
+            // 
+            // numericUpDownMutationPopulation
+            // 
+            this.numericUpDownMutationPopulation.Location = new System.Drawing.Point(117, 46);
+            this.numericUpDownMutationPopulation.Name = "numericUpDownMutationPopulation";
+            this.numericUpDownMutationPopulation.Size = new System.Drawing.Size(51, 20);
+            this.numericUpDownMutationPopulation.TabIndex = 4;
+            this.numericUpDownMutationPopulation.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
             // buttonManual
             // 
             this.buttonManual.Location = new System.Drawing.Point(30, 12);
@@ -145,7 +231,7 @@
             // 
             // buttonLoad
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(30, 532);
+            this.buttonLoad.Location = new System.Drawing.Point(30, 574);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(149, 41);
             this.buttonLoad.TabIndex = 10;
@@ -155,7 +241,7 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(30, 593);
+            this.buttonSave.Location = new System.Drawing.Point(30, 635);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(149, 41);
             this.buttonSave.TabIndex = 11;
@@ -166,7 +252,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(27, 205);
+            this.label6.Location = new System.Drawing.Point(27, 175);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(80, 13);
             this.label6.TabIndex = 17;
@@ -174,14 +260,14 @@
             // 
             // numericUpDownPopulationSize
             // 
-            this.numericUpDownPopulationSize.Location = new System.Drawing.Point(128, 203);
+            this.numericUpDownPopulationSize.Location = new System.Drawing.Point(128, 173);
             this.numericUpDownPopulationSize.Maximum = new decimal(new int[] {
             200,
             0,
             0,
             0});
             this.numericUpDownPopulationSize.Minimum = new decimal(new int[] {
-            16,
+            1,
             0,
             0,
             0});
@@ -200,8 +286,9 @@
             this.comboBoxCrossOverMethod.FormattingEnabled = true;
             this.comboBoxCrossOverMethod.Items.AddRange(new object[] {
             "Random",
-            "Greedy"});
-            this.comboBoxCrossOverMethod.Location = new System.Drawing.Point(91, 307);
+            "Greedy",
+            "Subtour"});
+            this.comboBoxCrossOverMethod.Location = new System.Drawing.Point(91, 250);
             this.comboBoxCrossOverMethod.Name = "comboBoxCrossOverMethod";
             this.comboBoxCrossOverMethod.Size = new System.Drawing.Size(88, 21);
             this.comboBoxCrossOverMethod.TabIndex = 7;
@@ -209,7 +296,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(27, 310);
+            this.label5.Location = new System.Drawing.Point(27, 253);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(57, 13);
             this.label5.TabIndex = 14;
@@ -218,7 +305,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(27, 283);
+            this.label4.Location = new System.Drawing.Point(27, 226);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(88, 13);
             this.label4.TabIndex = 13;
@@ -226,7 +313,7 @@
             // 
             // numericUpDownEliteCount
             // 
-            this.numericUpDownEliteCount.Location = new System.Drawing.Point(128, 281);
+            this.numericUpDownEliteCount.Location = new System.Drawing.Point(128, 224);
             this.numericUpDownEliteCount.Name = "numericUpDownEliteCount";
             this.numericUpDownEliteCount.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownEliteCount.TabIndex = 6;
@@ -239,7 +326,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(27, 257);
+            this.label3.Location = new System.Drawing.Point(27, 200);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(70, 13);
             this.label3.TabIndex = 11;
@@ -247,7 +334,7 @@
             // 
             // numericUpDownMaxGenerations
             // 
-            this.numericUpDownMaxGenerations.Location = new System.Drawing.Point(128, 255);
+            this.numericUpDownMaxGenerations.Location = new System.Drawing.Point(128, 198);
             this.numericUpDownMaxGenerations.Maximum = new decimal(new int[] {
             16000,
             0,
@@ -267,30 +354,9 @@
             0,
             0});
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 231);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Mutation Chance:";
-            // 
-            // numericUpDownMutationChance
-            // 
-            this.numericUpDownMutationChance.Location = new System.Drawing.Point(128, 229);
-            this.numericUpDownMutationChance.Name = "numericUpDownMutationChance";
-            this.numericUpDownMutationChance.Size = new System.Drawing.Size(51, 20);
-            this.numericUpDownMutationChance.TabIndex = 4;
-            this.numericUpDownMutationChance.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(30, 341);
+            this.buttonStart.Location = new System.Drawing.Point(30, 427);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(149, 40);
             this.buttonStart.TabIndex = 8;
@@ -300,7 +366,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(30, 396);
+            this.button2.Location = new System.Drawing.Point(30, 482);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(149, 40);
             this.button2.TabIndex = 9;
@@ -345,6 +411,18 @@
             0});
             this.numericUpDownCityCount.ValueChanged += new System.EventHandler(this.NumericUpDownCities_ValueChanged);
             // 
+            // checkBoxEliteOnly
+            // 
+            this.checkBoxEliteOnly.AutoSize = true;
+            this.checkBoxEliteOnly.Checked = true;
+            this.checkBoxEliteOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEliteOnly.Location = new System.Drawing.Point(30, 404);
+            this.checkBoxEliteOnly.Name = "checkBoxEliteOnly";
+            this.checkBoxEliteOnly.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxEliteOnly.TabIndex = 21;
+            this.checkBoxEliteOnly.Text = "View Elite Only";
+            this.checkBoxEliteOnly.UseVisualStyleBackColor = true;
+            // 
             // TSPViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,10 +439,13 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxViewPort)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutationIndividual)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutationPopulation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPopulationSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownEliteCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMaxGenerations)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMutationChance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCityCount)).EndInit();
             this.ResumeLayout(false);
 
@@ -379,7 +460,7 @@
         private System.Windows.Forms.PictureBox pictureBoxViewPort;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDownMutationChance;
+        private System.Windows.Forms.NumericUpDown numericUpDownMutationPopulation;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numericUpDownMaxGenerations;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
@@ -395,6 +476,12 @@
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.Button buttonManual;
+        private System.Windows.Forms.ComboBox comboBoxMutationMethod;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericUpDownMutationIndividual;
+        private System.Windows.Forms.CheckBox checkBoxEliteOnly;
     }
 }
 

@@ -10,12 +10,12 @@ namespace TSPTest
 {
     public partial class TSPViewer : Form
     {
-        int cityCount = 100;
+        int cityCount = 30;
         List<Point> cities;
         TSPGenerator tspGenerator;
-        const int horizontalSize = 700;
-        const int verticalSize = 700;
-        const int border = 0;
+        const int horizontalSize = 1200;
+        const int verticalSize = 1200;
+        const int border = 10;
 
         public static int HorizontalSize
         {
@@ -44,7 +44,8 @@ namespace TSPTest
         public TSPViewer()
         {
             InitializeComponent();
-            comboBoxCrossOverMethod.SelectedIndex = 0;
+            comboBoxCrossOverMethod.SelectedIndex = comboBoxMutationMethod.SelectedIndex = 0;
+
             tspGenerator = new TSPGenerator(cityCount, HorizontalSize, VerticalSize, Border);
             cities = tspGenerator.GenerateCities();
             pictureBoxViewPort.Image = cities.DrawCities();
@@ -80,10 +81,16 @@ namespace TSPTest
             options.population = population;
             options.populationSize = (int)numericUpDownPopulationSize.Value;
             options.maxGenerations = (int)numericUpDownMaxGenerations.Value;
-            options.mutationChance = (int)numericUpDownMutationChance.Value;
+            options.mutationPopulationPercentage = (int)numericUpDownMutationPopulation.Value;
+            options.mutationIndividualPercentage = (int)numericUpDownMutationIndividual.Value;
             options.elitePercentage = (int)numericUpDownEliteCount.Value;
             options.crossOverMethod = (CrossOverMethod)comboBoxCrossOverMethod.SelectedIndex;
-            new ProgressViewerDirectPaint(options).ShowDialog();
+            options.mutationMethod = (MutationMethod)comboBoxMutationMethod.SelectedIndex;
+
+            if (checkBoxEliteOnly.Checked)
+                new ProgressViewerElite(options).ShowDialog();
+            else
+                new ProgressViewerDirectPaint(options).ShowDialog();
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -123,9 +130,11 @@ namespace TSPTest
             TSPOptions options = new TSPOptions();
             options.populationSize = (int)numericUpDownPopulationSize.Value;
             options.maxGenerations = (int)numericUpDownMaxGenerations.Value;
-            options.mutationChance = (int)numericUpDownMutationChance.Value;
+            options.mutationPopulationPercentage = (int)numericUpDownMutationPopulation.Value;
+            options.mutationIndividualPercentage = (int)numericUpDownMutationIndividual.Value;
             options.elitePercentage = (int)numericUpDownEliteCount.Value;
             options.crossOverMethod = (CrossOverMethod)comboBoxCrossOverMethod.SelectedIndex;
+            options.mutationMethod = (MutationMethod)comboBoxMutationMethod.SelectedIndex;
 
             XmlDocument document = new XmlDocument();
             XmlNode problem = document.CreateElement("problem");

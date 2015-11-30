@@ -106,7 +106,7 @@ namespace TSPTest
             Graphics g = e.Graphics;
             g.Clear(Color.White);
 
-            for (int i = 0; i < regions.Count(); i++)
+            for (int i = 0; i < regions.Count() && i<population.Count(); i++)
             {
                 Rectangle region = regions[i];
                 if (i == 0)

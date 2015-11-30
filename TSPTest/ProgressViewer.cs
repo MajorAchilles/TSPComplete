@@ -26,7 +26,7 @@ namespace TSPTest
         {
             InitializeComponent();
 
-            this.mutationChance = tspOptions.mutationChance;
+            this.mutationChance = tspOptions.mutationPopulationPercentage;
             this.maxGenerations = tspOptions.maxGenerations;
             this.eliteCount = tspOptions.elitePercentage;
             this.population = tspOptions.population;
