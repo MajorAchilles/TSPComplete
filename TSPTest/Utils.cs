@@ -17,6 +17,7 @@ namespace TSPTest
             Bitmap tspImage = new Bitmap(TSPViewer.HorizontalSize, TSPViewer.VerticalSize);
             Graphics g = Graphics.FromImage(tspImage);
             //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Font font = new Font("Arial", 8F);
             g.Clear(Color.White);
             g.DrawRectangle(Pens.BlueViolet, new Rectangle(TSPViewer.Border, TSPViewer.Border, TSPViewer.HorizontalSize - (TSPViewer.Border * 2) - 1, TSPViewer.VerticalSize - (TSPViewer.Border * 2) - 1));
 
@@ -26,6 +27,7 @@ namespace TSPTest
                 Point next = tour[i + 1];
                 g.FillEllipse(Brushes.Black, new Rectangle(current.X - 2, current.Y - 2, 5, 5));
                 g.DrawEllipse(Pens.Black, new Rectangle(current.X - 4, current.Y - 4, 9, 9));
+                //g.DrawString(current.ToString(), font, Brushes.Black, new Point(current.X+10, current.Y));
                 g.DrawLine(Pens.Red, current, next);
             }
 
@@ -33,7 +35,7 @@ namespace TSPTest
             g.FillEllipse(Brushes.Black, new Rectangle(last.X - 2, last.Y - 2, 5, 5));
             g.DrawEllipse(Pens.Black, new Rectangle(last.X - 4, last.Y - 4, 9, 9));
             g.DrawLine(Pens.Red, last, tour[0]);
-
+            //g.DrawString(last.ToString(), font, Brushes.Black, new Point(last.X + 10, last.Y));
 
             return tspImage;
         }
@@ -107,6 +109,19 @@ namespace TSPTest
             solution.Fitness = solution.Tour.GetTourDistance();
 
             return solution;
+        }
+
+        public static bool IsIntersecting(Point line1start, Point line1end, Point line2start, Point line2end)
+        {
+            return OnOpposite(line1start, line1end, line2start, line2end) && OnOpposite(line2start, line2end, line1start, line1end);
+        }
+
+        private static bool OnOpposite(Point line1start, Point line1end, Point line2start, Point line2end)
+        {
+            int eqn1 = (line1end.X - line1start.X) * (line2start.Y - line1end.Y) - (line1end.Y - line1start.Y) * (line2start.X - line1end.X);
+            int eqn2 = (line1end.X - line1start.X) * (line2end.Y - line1end.Y) - (line1end.Y - line1start.Y) * (line2end.X - line1end.X);
+
+            return (eqn1 ^ eqn2) < 0;
         }
     }
 }

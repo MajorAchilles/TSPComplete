@@ -106,7 +106,7 @@ namespace TSPTest
 
                 if (i == 0) //Always mutate elite.
                 {
-                    child = MutateTwoOpt(child);
+                    child = MutateTwoOptNew(child);
                     child = MutateSwapNeighbour(child);
                     //if (options.mutationMethod == MutationMethod.SwapNeighbour)
                     //    child = MutateSwapNeighbour(child);
@@ -120,7 +120,7 @@ namespace TSPTest
                 {
                     if (random.Next(0, 101) <= options.mutationPopulationPercentage) //MUTATE
                     {
-                        child = MutateTwoOpt(child);
+                        child = MutateTwoOptNew(child);
                         child = MutateSwapNeighbour(child);
                     }
                     //if (options.mutationMethod == MutationMethod.SwapNeighbour)
@@ -218,7 +218,7 @@ namespace TSPTest
                 if (!solution.Tour.Contains(parent2.Tour[j]))
                     solution.Tour.Add(parent2.Tour[j]);
             }
-
+            solution.Fitness = solution.Tour.GetTourDistance();
             return solution;
         }
 
@@ -248,6 +248,7 @@ namespace TSPTest
                         }
                     }
             }
+
 
             solution.Fitness = solution.Tour.GetTourDistance();
             return solution;
@@ -370,6 +371,7 @@ namespace TSPTest
                         next = 0;
 
                     organism.Tour.Swap(index, next);
+                    organism.Fitness = organism.Tour.GetTourDistance();
 
                     if (organism.Fitness >= current) //If mutation wasn't beneficial
                     {
@@ -394,36 +396,36 @@ namespace TSPTest
             {
                 if (organism.Tour.Count > 3)
                 {
-                    int i11 = random.Next(0, organism.Tour.Count);
+                    int A = random.Next(0, organism.Tour.Count);
 
-                    int i12 = i11 + 1;
-                    if (i12 == organism.Tour.Count) // if index overflow
-                        i12 = 0; //First
+                    int B = A + 1;
+                    if (B == organism.Tour.Count) // if index overflow
+                        B = 0; //First
 
-                    int i21 = random.Next(0, organism.Tour.Count);
-                    while (i21 == i11 || i21 == i12) //If getting existing number
-                        i21 = random.Next(0, organism.Tour.Count);
+                    int C = random.Next(0, organism.Tour.Count);
+                    while (C == A || C == B) //If getting existing number
+                        C = random.Next(0, organism.Tour.Count);
 
-                    int i22 = i21 + 1;
-                    if (i22 == organism.Tour.Count)
-                        i22 = 0;
+                    int D = C + 1;
+                    if (D == organism.Tour.Count)
+                        D = 0;
 
 
-                    Point t11 = organism.Tour[i11];
-                    Point t12 = organism.Tour[i12];
-                    Point t21 = organism.Tour[i21];
-                    Point t22 = organism.Tour[i22];
+                    Point line1Start = organism.Tour[A];
+                    Point line1End = organism.Tour[B];
+                    Point line2Start = organism.Tour[C];
+                    Point line2End = organism.Tour[D];
 
-                    double originalDistance = Utils.GetDistance(t11, t12) + Utils.GetDistance(t21, t22);
-                    double newDistanceHorizontal = Utils.GetDistance(t11, t22) + Utils.GetDistance(t21, t12); //swap 12, 22
-                    double newDistanceVertical = Utils.GetDistance(t11, t21) + Utils.GetDistance(t22, t12); //swap 12, 21
+                    double originalDistance = Utils.GetDistance(line1Start, line1End) + Utils.GetDistance(line2Start, line2End);
+                    double newDistanceHorizontal = Utils.GetDistance(line1Start, line2End) + Utils.GetDistance(line2Start, line1End); //swap 12, 22
+                    double newDistanceVertical = Utils.GetDistance(line1Start, line2Start) + Utils.GetDistance(line2End, line1End); //swap 12, 21
 
                     if (newDistanceHorizontal < originalDistance || newDistanceVertical < originalDistance)
                         if (newDistanceHorizontal < newDistanceVertical)
                         {
                             Organism mutated = new Organism();
                             mutated.Tour = organism.Tour.ToList();
-                            mutated.Tour.Swap(i12, i22);
+                            mutated.Tour.Swap(B, D);
                             mutated.Fitness = mutated.Tour.GetTourDistance();
                             if (mutated.Fitness < organism.Fitness)
                                 organism = mutated;
@@ -432,13 +434,66 @@ namespace TSPTest
                         {
                             Organism mutated = new Organism();
                             mutated.Tour = organism.Tour.ToList();
-                            mutated.Tour.Swap(i12, i21);
+                            mutated.Tour.Swap(B, C);
                             mutated.Fitness = mutated.Tour.GetTourDistance();
                             if (mutated.Fitness < organism.Fitness)
                                 organism = mutated;
                         }
                 }
                 i++;
+            }
+            return organism;
+        }
+
+        private Organism MutateTwoOptNew(Organism organism)
+        {
+            //double tourLength = organism.Tour.Count;
+            //double percentage = options.mutationIndividualPercentage;
+            //tourLength = (int)((percentage / 100D) * tourLength);
+
+            if (organism.Tour.Count < 3)
+                return organism;
+
+            for (int A = 0; A < organism.Tour.Count - 2; A++)
+            {
+                int B = A + 1;
+                if (B == organism.Tour.Count)
+                    B = 0;
+
+                for (int C = B + 1; C < organism.Tour.Count; C++)
+                {
+                    int D = C + 1;
+                    if (D == organism.Tour.Count)
+                        D = 0;
+
+                    //Console.WriteLine("Line1: {0},{1} Line2: {2},{3}", A, B, C, D);
+
+                    Point line1Start = organism.Tour[A];
+                    Point line1End = organism.Tour[B];
+                    Point line2Start = organism.Tour[C];
+                    Point line2End = organism.Tour[D];
+
+                    if(Utils.IsIntersecting(line1Start, line1End, line2Start, line2End))
+                    {
+                        Organism mutateHorizontal = new Organism();
+                        mutateHorizontal.Tour = organism.Tour.ToList();
+                        mutateHorizontal.Tour.Swap(B, D);
+                        mutateHorizontal.Fitness = mutateHorizontal.Tour.GetTourDistance();
+
+                        Organism mutateVertical = new Organism();
+                        mutateVertical.Tour = organism.Tour.ToList();
+                        mutateVertical.Tour.Swap(B, C);
+                        mutateVertical.Fitness = mutateVertical.Tour.GetTourDistance();
+
+                        if(mutateHorizontal.Fitness<organism.Fitness || mutateVertical.Fitness<organism.Fitness)
+                        {
+                            if (mutateHorizontal.Fitness < organism.Fitness)
+                                organism = mutateHorizontal;
+                            else
+                                organism = mutateVertical;
+                        }
+                    }
+                }
             }
             return organism;
         }
