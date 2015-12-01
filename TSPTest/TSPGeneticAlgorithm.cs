@@ -488,13 +488,26 @@ namespace TSPTest
                         Organism mutateHorizontal = organism.Clone();
                         mutateHorizontal.OptimizingSwap(B, D);
 
+                        Organism mutateHorizontal2 = organism.Clone();
+                        mutateHorizontal.OptimizingSwap(D, B);
+
                         Organism mutateVertical = organism.Clone();
                         mutateVertical.OptimizingSwap(B, C);
 
+                        Organism mutateVertical2 = organism.Clone();
+                        mutateVertical.OptimizingSwap(C, B);
+
                         if (mutateHorizontal.Fitness <= organism.Fitness)
                             organism = mutateHorizontal;
-                        else if (mutateVertical.Fitness <= organism.Fitness)
+
+                        if (mutateHorizontal2.Fitness <= organism.Fitness)
+                            organism = mutateHorizontal2;
+
+                        if (mutateVertical.Fitness <= organism.Fitness)
                             organism = mutateVertical;
+
+                        if (mutateVertical2.Fitness <= organism.Fitness)
+                            organism = mutateVertical2;
                     }
                 }
             }
