@@ -78,6 +78,7 @@ namespace TSPTest
             }
 
             TSPOptions options = new TSPOptions();
+            options.geneLength = cityCount;
             options.population = population;
             options.populationSize = (int)numericUpDownPopulationSize.Value;
             options.maxGenerations = (int)numericUpDownMaxGenerations.Value;

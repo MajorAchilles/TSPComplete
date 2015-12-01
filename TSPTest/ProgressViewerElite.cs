@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace TSPTest
@@ -15,6 +16,7 @@ namespace TSPTest
         bool drawing = false;
         TSPOptions options;
         string data = null;
+        int sleepTime;
 
         private Organism[] population;
         private Bitmap image;
@@ -23,6 +25,7 @@ namespace TSPTest
         {
             this.options = options;
             this.population = options.population;
+            this.sleepTime = options.geneLength/2;
             InitializeComponent();
 
             bwAlgorithm = new BackgroundWorker();
@@ -66,7 +69,7 @@ namespace TSPTest
             while (ga.GenerationNo <= options.maxGenerations)
             {
                 worker.ReportProgress(ga.GenerationNo);
-                //Thread.Sleep(20); //100 miliseconds for creating image. 50 for drawing.
+                Thread.Sleep(sleepTime); //100 miliseconds for creating image. 50 for drawing.
                 while (drawing)
                 {
                 }

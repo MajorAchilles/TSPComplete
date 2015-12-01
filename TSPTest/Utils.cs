@@ -27,7 +27,7 @@ namespace TSPTest
                 Point next = tour[i + 1];
                 g.FillEllipse(Brushes.Black, new Rectangle(current.X - 2, current.Y - 2, 5, 5));
                 g.DrawEllipse(Pens.Black, new Rectangle(current.X - 4, current.Y - 4, 9, 9));
-                //g.DrawString(current.ToString(), font, Brushes.Black, new Point(current.X+10, current.Y));
+                //g.DrawString(current.ToString(), font, Brushes.Black, new Point(current.X + 10, current.Y));
                 g.DrawLine(Pens.Red, current, next);
             }
 
@@ -69,6 +69,16 @@ namespace TSPTest
             return Math.Round(distance, 3);
         }
 
+        public static int GetDistanceFast(this Point point1, Point point2)
+        {
+            if (point1 == null || point2 == null)
+                return 0;
+            int xDist = point1.X - point2.X;
+            int yDist = point1.Y - point2.Y;
+
+            return (xDist*xDist) + (yDist*yDist); //FAST. SINCE ONLY COMPARISION MATTERS. NOT ACCURACY.
+        }
+
         public static List<Point> Swap(this List<Point> tour, int index1, int index2)
         {
             Point first = tour[index1];
@@ -90,6 +100,22 @@ namespace TSPTest
                     tourDistance += GetDistance(city, next);
                 }
                 tourDistance += GetDistance(tour[tour.Count - 1], tour[0]);
+            }
+            return tourDistance;
+        }
+
+        public static double GetTourDistanceFast(this List<Point> tour)
+        {
+            int tourDistance = 0;
+            if (tour.Count > 2)
+            {
+                for (int i = 0; i < tour.Count - 2; i++)
+                {
+                    Point city = tour[i];
+                    Point next = tour[i + 1];
+                    tourDistance += GetDistanceFast(city, next);
+                }
+                tourDistance += GetDistanceFast(tour[tour.Count - 1], tour[0]);
             }
             return tourDistance;
         }

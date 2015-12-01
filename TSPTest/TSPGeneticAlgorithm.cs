@@ -21,6 +21,7 @@ namespace TSPTest
     public class TSPOptions
     {
         public Organism[] population;
+        public int geneLength;
         public int populationSize;
         public int maxGenerations;
         public int mutationPopulationPercentage;
@@ -193,7 +194,7 @@ namespace TSPTest
                 }
             }
 
-            solution.Fitness = solution.Tour.GetTourDistance();
+            solution.Fitness = solution.Tour.GetTourDistanceFast();
 
             return solution;
         }
@@ -218,7 +219,7 @@ namespace TSPTest
                 if (!solution.Tour.Contains(parent2.Tour[j]))
                     solution.Tour.Add(parent2.Tour[j]);
             }
-            solution.Fitness = solution.Tour.GetTourDistance();
+            solution.Fitness = solution.Tour.GetTourDistanceFast();
             return solution;
         }
 
@@ -250,7 +251,7 @@ namespace TSPTest
             }
 
 
-            solution.Fitness = solution.Tour.GetTourDistance();
+            solution.Fitness = solution.Tour.GetTourDistanceFast();
             return solution;
         }
 
@@ -352,7 +353,7 @@ namespace TSPTest
                 }
             }
 
-            solution.Fitness = solution.Tour.GetTourDistance();
+            solution.Fitness = solution.Tour.GetTourDistanceFast();
             return solution;
         }
 
@@ -365,19 +366,32 @@ namespace TSPTest
                 int index = 0;
                 while (index < organism.Tour.Count)
                 {
-                    int next = index + 1;
+                    int first = index - 1;
+                    if (first < 0)
+                        first = organism.Tour.Count - 1;
 
-                    if (index == organism.Tour.Count - 1)
+                    int next = index + 1;
+                    if (next == organism.Tour.Count)
                         next = 0;
 
-                    organism.Tour.Swap(index, next);
-                    organism.Fitness = organism.Tour.GetTourDistance();
+                    int last = next + 1;
+                    if (last == organism.Tour.Count)
+                        last = 0;
 
-                    if (organism.Fitness >= current) //If mutation wasn't beneficial
-                    {
-                        organism.Tour.Swap(index, next);
-                        organism.Fitness = organism.Tour.GetTourDistance();
-                    }
+                    int firstToIndex = organism.Tour[first].GetDistanceFast(organism.Tour[index]);
+                    int indexToNext = organism.Tour[index].GetDistanceFast(organism.Tour[next]);
+                    int nextToLast = organism.Tour[next].GetDistanceFast(organism.Tour[last]);
+                    int firstToNext = organism.Tour[first].GetDistanceFast(organism.Tour[next]);
+                    int indexToLast = organism.Tour[index].GetDistanceFast(organism.Tour[last]);
+
+                    int curDistance = firstToIndex + indexToNext + nextToLast;
+                    int swappedDistance = firstToNext + indexToNext + indexToLast;
+
+                    if(curDistance>swappedDistance)
+                        organism.Swap(index, next);
+
+                    //if (organism.Fitness >= current) //If mutation wasn't beneficial
+                    //    organism.Swap(index, next);
 
                     index++;
                 }
@@ -423,19 +437,15 @@ namespace TSPTest
                     if (newDistanceHorizontal < originalDistance || newDistanceVertical < originalDistance)
                         if (newDistanceHorizontal < newDistanceVertical)
                         {
-                            Organism mutated = new Organism();
-                            mutated.Tour = organism.Tour.ToList();
-                            mutated.Tour.Swap(B, D);
-                            mutated.Fitness = mutated.Tour.GetTourDistance();
+                            Organism mutated = organism.Clone();
+                            mutated.Swap(B, D);
                             if (mutated.Fitness < organism.Fitness)
                                 organism = mutated;
                         }
                         else
                         {
-                            Organism mutated = new Organism();
-                            mutated.Tour = organism.Tour.ToList();
-                            mutated.Tour.Swap(B, C);
-                            mutated.Fitness = mutated.Tour.GetTourDistance();
+                            Organism mutated = organism.Clone();
+                            mutated.Swap(B, C);
                             if (mutated.Fitness < organism.Fitness)
                                 organism = mutated;
                         }
@@ -475,23 +485,16 @@ namespace TSPTest
 
                     if(Utils.IsIntersecting(line1Start, line1End, line2Start, line2End))
                     {
-                        Organism mutateHorizontal = new Organism();
-                        mutateHorizontal.Tour = organism.Tour.ToList();
-                        mutateHorizontal.Tour.Swap(B, D);
-                        mutateHorizontal.Fitness = mutateHorizontal.Tour.GetTourDistance();
+                        Organism mutateHorizontal = organism.Clone();
+                        mutateHorizontal.OptimizingSwap(B, D);
 
-                        Organism mutateVertical = new Organism();
-                        mutateVertical.Tour = organism.Tour.ToList();
-                        mutateVertical.Tour.Swap(B, C);
-                        mutateVertical.Fitness = mutateVertical.Tour.GetTourDistance();
+                        Organism mutateVertical = organism.Clone();
+                        mutateVertical.OptimizingSwap(B, C);
 
-                        if(mutateHorizontal.Fitness<organism.Fitness || mutateVertical.Fitness<organism.Fitness)
-                        {
-                            if (mutateHorizontal.Fitness < organism.Fitness)
-                                organism = mutateHorizontal;
-                            else
-                                organism = mutateVertical;
-                        }
+                        if (mutateHorizontal.Fitness <= organism.Fitness)
+                            organism = mutateHorizontal;
+                        else if (mutateVertical.Fitness <= organism.Fitness)
+                            organism = mutateVertical;
                     }
                 }
             }
