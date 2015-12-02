@@ -42,7 +42,9 @@ namespace TSPTest
             if (larger == 0)
                 larger = Tour.Count - 1;
 
-            while(smaller<larger)
+            Tour.Swap(smaller, larger);
+
+            while (smaller<larger)
             {
                 smaller++;
                 larger--;

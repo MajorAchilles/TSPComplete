@@ -10,7 +10,7 @@ namespace TSPTest
 {
     public partial class TSPViewer : Form
     {
-        int cityCount = 30;
+        int cityCount = 50;
         List<Point> cities;
         TSPGenerator tspGenerator;
         const int horizontalSize = 900;

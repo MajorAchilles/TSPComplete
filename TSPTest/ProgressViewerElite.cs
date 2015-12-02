@@ -13,7 +13,7 @@ namespace TSPTest
         double worstDistance = -100;
         TSPGeneticAlgorithm ga;
         BackgroundWorker bwAlgorithm;
-        bool drawing = false;
+        volatile bool drawing = false;
         TSPOptions options;
         string data = null;
         int sleepTime;

@@ -39,8 +39,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.numericUpDownMutationIndividual = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
-            this.comboBoxMutationMethod = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxMutationMethod = new System.Windows.Forms.ComboBox();
             this.numericUpDownMutationPopulation = new System.Windows.Forms.NumericUpDown();
             this.buttonManual = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
@@ -199,6 +199,15 @@
             this.label7.Text = "Mutation:";
             this.label7.Visible = false;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Population %";
+            // 
             // comboBoxMutationMethod
             // 
             this.comboBoxMutationMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -211,15 +220,6 @@
             this.comboBoxMutationMethod.Size = new System.Drawing.Size(95, 21);
             this.comboBoxMutationMethod.TabIndex = 18;
             this.comboBoxMutationMethod.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Population %";
             // 
             // numericUpDownMutationPopulation
             // 
@@ -419,7 +419,7 @@
             this.numericUpDownCityCount.Size = new System.Drawing.Size(51, 20);
             this.numericUpDownCityCount.TabIndex = 1;
             this.numericUpDownCityCount.Value = new decimal(new int[] {
-            100,
+            50,
             0,
             0,
             0});
@@ -434,7 +434,7 @@
             this.Name = "TSPViewer";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Form1";
+            this.Text = "TSP Generator";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();

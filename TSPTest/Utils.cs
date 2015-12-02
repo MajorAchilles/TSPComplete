@@ -17,7 +17,7 @@ namespace TSPTest
             Bitmap tspImage = new Bitmap(TSPViewer.HorizontalSize, TSPViewer.VerticalSize);
             Graphics g = Graphics.FromImage(tspImage);
             //g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            Font font = new Font("Arial", 8F);
+            //Font font = new Font("Arial", 8F);
             g.Clear(Color.White);
             g.DrawRectangle(Pens.BlueViolet, new Rectangle(TSPViewer.Border, TSPViewer.Border, TSPViewer.HorizontalSize - (TSPViewer.Border * 2) - 1, TSPViewer.VerticalSize - (TSPViewer.Border * 2) - 1));
 
@@ -27,7 +27,7 @@ namespace TSPTest
                 Point next = tour[i + 1];
                 g.FillEllipse(Brushes.Black, new Rectangle(current.X - 2, current.Y - 2, 5, 5));
                 g.DrawEllipse(Pens.Black, new Rectangle(current.X - 4, current.Y - 4, 9, 9));
-                //g.DrawString(current.ToString(), font, Brushes.Black, new Point(current.X + 10, current.Y));
+                //g.DrawString(i+" - "+current.ToString(), font, Brushes.Black, new Point(current.X + 10, current.Y));
                 g.DrawLine(Pens.Red, current, next);
             }
 
@@ -35,7 +35,7 @@ namespace TSPTest
             g.FillEllipse(Brushes.Black, new Rectangle(last.X - 2, last.Y - 2, 5, 5));
             g.DrawEllipse(Pens.Black, new Rectangle(last.X - 4, last.Y - 4, 9, 9));
             g.DrawLine(Pens.Red, last, tour[0]);
-            //g.DrawString(last.ToString(), font, Brushes.Black, new Point(last.X + 10, last.Y));
+            //g.DrawString((tour.Count - 1) + " - " + last.ToString(), font, Brushes.Black, new Point(last.X + 10, last.Y));
 
             return tspImage;
         }

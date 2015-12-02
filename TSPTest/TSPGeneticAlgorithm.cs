@@ -77,6 +77,8 @@ namespace TSPTest
                 double popCount = populationList.Count;
                 double percentage = options.elitePercentage;
                 int num = (int)((percentage / 100D) * popCount);
+                if (num == 0)
+                    num = 1;
                 num = (int)popCount - num;
                 newList.RemoveRange(newList.Count - num, num);
 
@@ -477,37 +479,143 @@ namespace TSPTest
                         D = 0;
 
                     //Console.WriteLine("Line1: {0},{1} Line2: {2},{3}", A, B, C, D);
-
-                    Point line1Start = organism.Tour[A];
-                    Point line1End = organism.Tour[B];
-                    Point line2Start = organism.Tour[C];
-                    Point line2End = organism.Tour[D];
-
-                    if(Utils.IsIntersecting(line1Start, line1End, line2Start, line2End))
+                    if(A!=D)
                     {
-                        Organism mutateHorizontal = organism.Clone();
-                        mutateHorizontal.OptimizingSwap(B, D);
+                        if(random.Next(0,2)==1)
+                        {
+                            int temp = A;
+                            A = B;
+                            B = temp;
+                            temp = C;
+                            C = D;
+                            D = temp;
+                        }
 
-                        Organism mutateHorizontal2 = organism.Clone();
-                        mutateHorizontal.OptimizingSwap(D, B);
+                        Point line1Start = organism.Tour[A];
+                        Point line1End = organism.Tour[B];
+                        Point line2Start = organism.Tour[C];
+                        Point line2End = organism.Tour[D];
 
-                        Organism mutateVertical = organism.Clone();
-                        mutateVertical.OptimizingSwap(B, C);
+                        if (Utils.IsIntersecting(line1Start, line1End, line2Start, line2End))
+                        {
+                            #region TRIAL
+                            //Organism mutateAB = organism.Clone();
+                            //mutateAB.OptimizingSwap(A, B);
 
-                        Organism mutateVertical2 = organism.Clone();
-                        mutateVertical.OptimizingSwap(C, B);
+                            //Organism mutateAC = organism.Clone();
+                            //mutateAB.OptimizingSwap(A, C);
 
-                        if (mutateHorizontal.Fitness <= organism.Fitness)
-                            organism = mutateHorizontal;
+                            //Organism mutateAD = organism.Clone();
+                            //mutateAB.OptimizingSwap(A, D);
 
-                        if (mutateHorizontal2.Fitness <= organism.Fitness)
-                            organism = mutateHorizontal2;
+                            //Organism mutateBC = organism.Clone();
+                            //mutateAB.OptimizingSwap(B, C);
 
-                        if (mutateVertical.Fitness <= organism.Fitness)
-                            organism = mutateVertical;
+                            //Organism mutateBD = organism.Clone();
+                            //mutateAB.OptimizingSwap(B, D);
 
-                        if (mutateVertical2.Fitness <= organism.Fitness)
-                            organism = mutateVertical2;
+                            //Organism mutateCD = organism.Clone();
+                            //mutateAB.OptimizingSwap(C, D);
+
+                            ////REVERSE
+                            //Organism mutateBA = organism.Clone();
+                            //mutateAB.OptimizingSwap(B, A);
+
+                            //Organism mutateCA = organism.Clone();
+                            //mutateAB.OptimizingSwap(C, A);
+
+                            //Organism mutateDA = organism.Clone();
+                            //mutateAB.OptimizingSwap(D, A);
+
+                            //Organism mutateCB = organism.Clone();
+                            //mutateAB.OptimizingSwap(C, B);
+
+                            //Organism mutateDB = organism.Clone();
+                            //mutateAB.OptimizingSwap(D, B);
+
+                            //Organism mutateDC = organism.Clone();
+                            //mutateAB.OptimizingSwap(D, C);
+
+
+
+                            //if (mutateAB.Fitness < organism.Fitness)
+                            //    organism = mutateAB;
+
+                            //if (mutateAC.Fitness < organism.Fitness)
+                            //    organism = mutateAC;
+
+                            //if (mutateAD.Fitness < organism.Fitness)
+                            //    organism = mutateAD;
+
+                            //if (mutateBC.Fitness < organism.Fitness)
+                            //    organism = mutateBC;
+
+                            //if (mutateBD.Fitness < organism.Fitness)
+                            //    organism = mutateBD;
+
+                            //if (mutateCD.Fitness < organism.Fitness)
+                            //    organism = mutateCD;
+
+
+                            //REVERSE
+
+                            //if (mutateBA.Fitness < organism.Fitness)
+                            //    organism = mutateBA;
+
+                            //if (mutateCA.Fitness < organism.Fitness)
+                            //    organism = mutateCA;
+
+                            //if (mutateDA.Fitness < organism.Fitness)
+                            //    organism = mutateDA;
+
+                            //if (mutateCB.Fitness < organism.Fitness)
+                            //    organism = mutateCB;
+
+                            //if (mutateDB.Fitness < organism.Fitness)
+                            //    organism = mutateDB;
+
+                            //if (mutateDC.Fitness < organism.Fitness)
+                            //    organism = mutateDC;
+                            #endregion
+
+                            Organism mutateHorizontal = organism.Clone();
+                            mutateHorizontal.OptimizingSwap(B, D);
+
+                            Organism mutateHorizontal2 = organism.Clone();
+                            mutateHorizontal.OptimizingSwap(D, B);
+
+                            Organism mutateVertical = organism.Clone();
+                            mutateVertical.OptimizingSwap(B, C);
+
+                            Organism mutateVertical2 = organism.Clone();
+                            mutateVertical.OptimizingSwap(C, B);
+
+                            if (mutateHorizontal.Fitness <= organism.Fitness)
+                                organism = mutateHorizontal;
+
+                            if (mutateHorizontal2.Fitness <= organism.Fitness)
+                                organism = mutateHorizontal2;
+
+                            if (mutateVertical.Fitness <= organism.Fitness)
+                                organism = mutateVertical;
+
+                            if (mutateVertical2.Fitness <= organism.Fitness)
+                                organism = mutateVertical2;
+
+                            #region OLD CODE
+                            //Organism mutateHorizontal = organism.Clone();
+                            //mutateHorizontal.OptimizingSwap(B, D);
+
+                            //Organism mutateHorizontal2 = organism.Clone();
+                            //mutateHorizontal.OptimizingSwap(D, B);
+
+                            //Organism mutateVertical = organism.Clone();
+                            //mutateVertical.OptimizingSwap(B, C);
+
+                            //Organism mutateVertical2 = organism.Clone();
+                            //mutateVertical.OptimizingSwap(C, B);
+                            #endregion
+                        }
                     }
                 }
             }
